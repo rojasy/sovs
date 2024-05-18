@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sovs/controllers/logged_in_user_controller.dart';
 import '../screens/login_screen.dart';
+import 'controllers/candidate_controller.dart';
 import 'controllers/election_controller.dart';
 
 void main() {
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => GetLoggedInUserController()),
         ChangeNotifierProvider(create: (context) => GetAllElectionController()),
+        ChangeNotifierProvider(create: (context) => CandidateController()),
       ],
       child: MaterialApp(
         title: 'Smart Voting System',

@@ -5,6 +5,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../config/config_url.dart';
 import '../models/all_election_model.dart';
+import '../models/get_candidate_by_category_model.dart';
 import '../models/logged_in_user_model.dart';
 
 class SovsQueriesServices {
@@ -107,6 +108,157 @@ class SovsQueriesServices {
       GetAllElectionResponse getAllElectionResponse =
       getAllElectionResponseFromJson(jsonEncode(result.data));
       return getAllElectionResponse;
+    }
+  }
+
+  Future<GetAllCandidateByElectionCategoryResponse> getAllCandidateByElectionCategoryPresident() async {
+    final GraphQLClient authorizedClient = await initGraphQLClient();
+    QueryResult result = await authorizedClient.query(
+      QueryOptions(document: parseString("""
+           query GetAllCandidateByElectionCategory(\$category: ElectionCategory, \$pageParam: PageableParamInput) {
+  getAllCandidateByElectionCategory(category: \$category, pageParam: \$pageParam) {
+    content {
+      active
+      description
+      election {
+        active
+        category
+        description
+        id
+        name
+        uuid
+        year
+      }
+      id
+      title
+      userAccount {
+        active
+        email
+        fullName
+        id
+        phone
+        username
+        uuid
+      }
+      uuid
+    }
+  }
+}
+  """),variables: {
+        "pageParam": {
+          "first": 0,
+          "size": 20
+        },
+        "category": "PRESIDENT"
+      }),
+    );
+
+    if (result.hasException) {
+      throw Exception(result.exception);
+    } else {
+      GetAllCandidateByElectionCategoryResponse candidateByElectionCategoryResponse =
+      getAllCandidateByElectionCategoryResponseFromJson(jsonEncode(result.data));
+      return candidateByElectionCategoryResponse;
+    }
+  }
+  Future<GetAllCandidateByElectionCategoryResponse> getAllCandidateByElectionCategoryCOET() async {
+    final GraphQLClient authorizedClient = await initGraphQLClient();
+    QueryResult result = await authorizedClient.query(
+      QueryOptions(document: parseString("""
+           query GetAllCandidateByElectionCategory(\$category: ElectionCategory, \$pageParam: PageableParamInput) {
+  getAllCandidateByElectionCategory(category: \$category, pageParam: \$pageParam) {
+    content {
+      active
+      description
+      election {
+        active
+        category
+        description
+        id
+        name
+        uuid
+        year
+      }
+      id
+      title
+      userAccount {
+        active
+        email
+        fullName
+        id
+        phone
+        username
+        uuid
+      }
+      uuid
+    }
+  }
+}
+  """),variables: {
+        "pageParam": {
+          "first": 0,
+          "size": 20
+        },
+        "category": "COET_PARLIAMENT"
+      }),
+    );
+
+    if (result.hasException) {
+      throw Exception(result.exception);
+    } else {
+      GetAllCandidateByElectionCategoryResponse candidateByElectionCategoryResponse =
+      getAllCandidateByElectionCategoryResponseFromJson(jsonEncode(result.data));
+      return candidateByElectionCategoryResponse;
+    }
+  }
+  Future<GetAllCandidateByElectionCategoryResponse> getAllCandidateByElectionCategoryCOBA() async {
+    final GraphQLClient authorizedClient = await initGraphQLClient();
+    QueryResult result = await authorizedClient.query(
+      QueryOptions(document: parseString("""
+           query GetAllCandidateByElectionCategory(\$category: ElectionCategory, \$pageParam: PageableParamInput) {
+  getAllCandidateByElectionCategory(category: \$category, pageParam: \$pageParam) {
+    content {
+      active
+      description
+      election {
+        active
+        category
+        description
+        id
+        name
+        uuid
+        year
+      }
+      id
+      title
+      userAccount {
+        active
+        email
+        fullName
+        id
+        phone
+        username
+        uuid
+      }
+      uuid
+    }
+  }
+}
+  """),variables: {
+        "pageParam": {
+          "first": 0,
+          "size": 20
+        },
+        "category": "COBA_PARLIAMENT"
+      }),
+    );
+
+    if (result.hasException) {
+      throw Exception(result.exception);
+    } else {
+      GetAllCandidateByElectionCategoryResponse candidateByElectionCategoryResponse =
+      getAllCandidateByElectionCategoryResponseFromJson(jsonEncode(result.data));
+      return candidateByElectionCategoryResponse;
     }
   }
 }

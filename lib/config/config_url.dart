@@ -10,9 +10,6 @@ import '../utils/constants.dart';
 Future<GraphQLClient> initGraphQLClient() async {
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
-  // final appDocumentDirectory = await getApplicationDocumentsDirectory();
-  // Hive.init(appDocumentDirectory.path);
-  // await initHiveForFlutter();
   final HttpLink httpLink = HttpLink(
       '${graphqlUrl}/graphql');
   String? Token = await SessionManager().getAccessToken();

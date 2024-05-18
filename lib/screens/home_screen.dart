@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sovs/controllers/logged_in_user_controller.dart';
+import 'package:sovs/screens/coba_screen.dart';
+import 'package:sovs/screens/coet_screen.dart';
 import 'package:sovs/screens/presidential_screen.dart';
 import 'package:sovs/utils/constants.dart';
 
@@ -56,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(top: 20.0,right: 20.0,left: 20.0),
             child: InkWell(
               onTap: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PresidentialScrenn()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => CoetScreen()));
               },
               child: Container(
                 width: double.infinity,
@@ -87,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(top: 20.0,right: 20.0,left: 20.0),
             child: InkWell(
               onTap: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PresidentialScrenn()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => CobaScreen()));
               },
               child: Container(
                 width: double.infinity,

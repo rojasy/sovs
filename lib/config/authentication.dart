@@ -66,7 +66,7 @@ class Oauth2Httprequest {
           message: 'An error occurred during authentication.');
     }
   }
-  Future<AuthResult> logout() async{
+ static Future<AuthResult> logout() async{
     sessionManager.saveAccessToken('');
     String? sessionToken=await sessionManager.getAccessToken();
     // sessionManager.saveRememberMe(false);

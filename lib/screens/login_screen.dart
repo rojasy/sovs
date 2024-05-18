@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
+import 'package:sovs/screens/admin_home_screen.dart';
 import 'package:sovs/screens/home_screen.dart';
 import 'package:sovs/session/session_manager.dart';
 import 'package:sovs/utils/constants.dart';
 
 import '../config/authentication.dart';
 import '../config/config_url.dart';
+import '../models/logged_in_user_model.dart';
+import '../operations/queries.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,6 +28,27 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   SessionManager sessionManager = SessionManager();
+
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          const CircularProgressIndicator(),
+          Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: Text("Loging in")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -100,6 +124,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     onPressed: ()async{
                       if (_formKey.currentState!.validate()) {
+
+                        showLoaderDialog(context);
+
                         String username = usernameController.text;
                         String password = passwordController.text;
 
@@ -117,9 +144,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         print(sessionToken);
                         final String? message;
                         if (sessionToken != null && authResult.code == 200) {
+
+                          Navigator.of(context).pop();
+
                           message = authResult.message;
                           debugPrint('Success ${authResult.code}');
                         } else {
+
+                          Navigator.of(context).pop();
+
                           debugPrint('fail ${authResult.code}');
                           message = authResult.message;
                         }
@@ -136,10 +169,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             await fetchGraphQLData();
 
-                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>AdminHomeScreen()), (route) => false);
 
-                            // WerisQueries werisQuery = WerisQueries();
-                            // GetUserProfileAndRoleResponse userProfileAndRole = await werisQuery.getUserProfileAndRole();
+                            SovsQueriesServices sovsService = SovsQueriesServices();
+                            GetLoggedInUserResponse loggedUser = await sovsService.getLoggedInUser();
+
+
+                            // String role = loggedUser.getLoggedInUser.data.roles.;
+
                             //
                             // print("userProfileAndRole.getUserProfileAndRole.data.userProfile.profileType");
                             // print(userProfileAndRole.getUserProfileAndRole.data.userProfile.profileType);

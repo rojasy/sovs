@@ -5,6 +5,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../config/config_url.dart';
 import '../models/all_election_model.dart';
+import '../models/get_all_candidates_model.dart';
+import '../models/get_all_users_model.dart';
 import '../models/get_candidate_by_category_model.dart';
 import '../models/logged_in_user_model.dart';
 
@@ -118,10 +120,8 @@ class SovsQueriesServices {
            query GetAllCandidateByElectionCategory(\$category: ElectionCategory, \$pageParam: PageableParamInput) {
   getAllCandidateByElectionCategory(category: \$category, pageParam: \$pageParam) {
     content {
-      active
       description
       election {
-        active
         category
         description
         id
@@ -131,16 +131,18 @@ class SovsQueriesServices {
       }
       id
       title
+      uuid
       userAccount {
         active
-        email
+        firstName
         fullName
         id
+        lastName
         phone
         username
         uuid
+        email
       }
-      uuid
     }
   }
 }
@@ -168,10 +170,8 @@ class SovsQueriesServices {
            query GetAllCandidateByElectionCategory(\$category: ElectionCategory, \$pageParam: PageableParamInput) {
   getAllCandidateByElectionCategory(category: \$category, pageParam: \$pageParam) {
     content {
-      active
       description
       election {
-        active
         category
         description
         id
@@ -181,16 +181,18 @@ class SovsQueriesServices {
       }
       id
       title
+      uuid
       userAccount {
         active
-        email
+        firstName
         fullName
         id
+        lastName
         phone
         username
         uuid
+        email
       }
-      uuid
     }
   }
 }
@@ -218,10 +220,8 @@ class SovsQueriesServices {
            query GetAllCandidateByElectionCategory(\$category: ElectionCategory, \$pageParam: PageableParamInput) {
   getAllCandidateByElectionCategory(category: \$category, pageParam: \$pageParam) {
     content {
-      active
       description
       election {
-        active
         category
         description
         id
@@ -231,16 +231,18 @@ class SovsQueriesServices {
       }
       id
       title
+      uuid
       userAccount {
         active
-        email
+        firstName
         fullName
         id
+        lastName
         phone
         username
         uuid
+        email
       }
-      uuid
     }
   }
 }
@@ -259,6 +261,96 @@ class SovsQueriesServices {
       GetAllCandidateByElectionCategoryResponse candidateByElectionCategoryResponse =
       getAllCandidateByElectionCategoryResponseFromJson(jsonEncode(result.data));
       return candidateByElectionCategoryResponse;
+    }
+  }
+
+  Future<GetAllUsersResponse> getAllUsers() async {
+    final GraphQLClient authorizedClient = await initGraphQLClient();
+    QueryResult result = await authorizedClient.query(
+      QueryOptions(document: parseString("""
+           query GetAllUsers(\$pageParam: PageableParamInput) {
+  getAllUsers(pageParam: \$pageParam) {
+    content {
+      active
+      email
+      firstName
+      id
+      lastName
+      middleName
+      phone
+      uuid
+      username
+      fullName
+    }
+  }
+}
+  """),variables: {
+        "pageParam": {
+          "first": 0,
+          "size": 20
+        },
+      }),
+    );
+
+    print(result);
+    if (result.hasException) {
+      throw Exception(result.exception);
+    } else {
+      GetAllUsersResponse getAllUsersResponse =
+      getAllUsersResponseFromJson(jsonEncode(result.data));
+      return getAllUsersResponse;
+    }
+  }
+
+  Future<GetAllCandidatesResponse> getAllCandidates() async {
+    final GraphQLClient authorizedClient = await initGraphQLClient();
+    QueryResult result = await authorizedClient.query(
+      QueryOptions(document: parseString("""
+           query GetAllCandidates(\$pageParam: PageableParamInput) {
+  getAllCandidates(pageParam: \$pageParam) {
+    content {
+      title
+      description
+      uuid
+      userAccount {
+        firstName
+        fullName
+        id
+        lastName
+        username
+        uuid
+        email
+        phone
+      }
+      id
+      active
+      election {
+        category
+        id
+        name
+        uuid
+        year
+        active
+        description
+      }
+    }
+  }
+}
+  """),variables: {
+        "pageParam": {
+          "first": 0,
+          "size": 20
+        },
+      }),
+    );
+
+    print(result);
+    if (result.hasException) {
+      throw Exception(result.exception);
+    } else {
+      GetAllCandidatesResponse getAllCandidatesResponse =
+      getAllCandidatesResponseFromJson(jsonEncode(result.data));
+      return getAllCandidatesResponse;
     }
   }
 }

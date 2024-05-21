@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../controllers/election_controller.dart';
 import '../utils/constants.dart';
+import 'add_election_screen.dart';
 
 class ElectionScreen extends StatefulWidget {
   const ElectionScreen({super.key});
@@ -15,7 +16,7 @@ class _ElectionScreenState extends State<ElectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:Text("Election"),backgroundColor: primaryColor,iconTheme: IconThemeData(color: Colors.white),),
+      appBar: AppBar(title: Text("Election",style: TextStyle(color: whiteColor,fontFamily: "Poppins"),),centerTitle: true,backgroundColor: primaryColor,iconTheme: IconThemeData(color: whiteColor)),
       body: Column(
         children: [
           SizedBox(height: 10,),
@@ -32,7 +33,7 @@ class _ElectionScreenState extends State<ElectionScreen> {
                       )
                   ),
                   onPressed: (){
-                    // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProjectReportingScreen()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AddElectionScreen()));
                   }, child: Text("Add Election",style: TextStyle(color: Colors.white)))
             ],
           ),
@@ -53,13 +54,17 @@ class _ElectionScreenState extends State<ElectionScreen> {
                           children: [
                             Material(
                               elevation:4,
-                              child: ListTile(
-                                title:
-                                  Text(
-                                      "Title: ${electionData.getAllElection[index].name}",
-                                      // style: detailsStyle
-                                  ), subtitle: Text("Category: ${electionData.getAllElection[index].category}"),
+                              child: Expanded(
+                                child: ListTile(
+                                  title:
+                                    Flexible(
+                                      child: Text(
+                                          "Title: ${electionData.getAllElection[index].name}",
+                                          // style: detailsStyle
+                                      ),
+                                    ), subtitle: Text("Category: ${electionData.getAllElection[index].category}"),
 
+                                ),
                               ),
                             ),
                           ],

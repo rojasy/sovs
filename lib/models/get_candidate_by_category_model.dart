@@ -41,47 +41,42 @@ class GetAllCandidateByElectionCategory {
 }
 
 class CandidatesContent {
-  bool active;
   String description;
   Election election;
   int id;
   String title;
-  UserAccount userAccount;
   String uuid;
+  UserAccount userAccount;
 
   CandidatesContent({
-    required this.active,
     required this.description,
     required this.election,
     required this.id,
     required this.title,
-    required this.userAccount,
     required this.uuid,
+    required this.userAccount,
   });
 
   factory CandidatesContent.fromJson(Map<String, dynamic> json) => CandidatesContent(
-    active: json["active"],
     description: json["description"],
     election: Election.fromJson(json["election"]),
     id: json["id"],
     title: json["title"],
-    userAccount: UserAccount.fromJson(json["userAccount"]),
     uuid: json["uuid"],
+    userAccount: UserAccount.fromJson(json["userAccount"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "active": active,
     "description": description,
     "election": election.toJson(),
     "id": id,
     "title": title,
-    "userAccount": userAccount.toJson(),
     "uuid": uuid,
+    "userAccount": userAccount.toJson(),
   };
 }
 
 class Election {
-  bool active;
   String category;
   String description;
   int id;
@@ -90,7 +85,6 @@ class Election {
   int year;
 
   Election({
-    required this.active,
     required this.category,
     required this.description,
     required this.id,
@@ -100,7 +94,6 @@ class Election {
   });
 
   factory Election.fromJson(Map<String, dynamic> json) => Election(
-    active: json["active"],
     category: json["category"],
     description: json["description"],
     id: json["id"],
@@ -110,7 +103,6 @@ class Election {
   );
 
   Map<String, dynamic> toJson() => {
-    "active": active,
     "category": category,
     "description": description,
     "id": id,
@@ -122,40 +114,48 @@ class Election {
 
 class UserAccount {
   bool active;
-  String email;
+  String firstName;
   String fullName;
   int id;
+  String lastName;
   String phone;
   String username;
   String uuid;
+  String email;
 
   UserAccount({
     required this.active,
-    required this.email,
+    required this.firstName,
     required this.fullName,
     required this.id,
+    required this.lastName,
     required this.phone,
     required this.username,
     required this.uuid,
+    required this.email,
   });
 
   factory UserAccount.fromJson(Map<String, dynamic> json) => UserAccount(
     active: json["active"],
-    email: json["email"],
+    firstName: json["firstName"],
     fullName: json["fullName"],
     id: json["id"],
+    lastName: json["lastName"],
     phone: json["phone"],
     username: json["username"],
     uuid: json["uuid"],
+    email: json["email"],
   );
 
   Map<String, dynamic> toJson() => {
     "active": active,
-    "email": email,
+    "firstName": firstName,
     "fullName": fullName,
     "id": id,
+    "lastName": lastName,
     "phone": phone,
     "username": username,
     "uuid": uuid,
+    "email": email,
   };
 }

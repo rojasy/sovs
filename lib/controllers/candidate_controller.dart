@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:sovs/operations/mutations.dart';
 
+import '../models/get_all_candidates_model.dart';
 import '../models/get_candidate_by_category_model.dart';
 import '../operations/queries.dart';
 
 class CandidateController extends ChangeNotifier{
   CandidateController() {
+    getAllCandidatesFunction();
     getAllCandidateByElectionCategoryPresident();
     getAllCandidateByElectionCategoryCOET();
     getAllCandidateByElectionCategoryCOBA();
   }
   List<CandidatesContent> _getAllCandidateByCategoryList = [];
   List<CandidatesContent> get getAllCandidateByCategoryList => _getAllCandidateByCategoryList;
+
+  List<AllCandidates> _getAllCandidatesList = [];
+  List<AllCandidates> get getAllCandidatesList => _getAllCandidatesList;
 
   List<CandidatesContent> _getAllCandidateByCategoryCOETList = [];
   List<CandidatesContent> get getAllCandidateByCategoryCOETList => _getAllCandidateByCategoryCOETList;
@@ -20,6 +25,24 @@ class CandidateController extends ChangeNotifier{
   List<CandidatesContent> get getAllCandidateByCategoryCOBAList => _getAllCandidateByCategoryCOBAList;
 
   bool dataLoading = false;
+
+  getAllCandidatesFunction() async {
+    dataLoading = true;
+    try {
+      SovsQueriesServices service = SovsQueriesServices();
+      GetAllCandidatesResponse getAllCandidatesResponse =
+      await service.getAllCandidates();
+
+
+      _getAllCandidatesList = getAllCandidatesResponse.getAllCandidates.content;
+      dataLoading = false;
+      notifyListeners();
+
+
+    } catch (err) {
+      print(err.toString());
+    }
+  }
 
   getAllCandidateByElectionCategoryPresident() async {
     dataLoading = true;
@@ -80,6 +103,18 @@ class CandidateController extends ChangeNotifier{
       int year
       ) async {
     Map<String, dynamic>? result = await SovsMutation.addVote(context, candidateUuid, electionUuid, year);
+    notifyListeners();
+    return result;
+  }
+
+
+
+  Future<Map<String, dynamic>?> createCandidate(
+      BuildContext context,
+      String? description, String? electionUuid,String? title,String? userUuid
+      ) async {
+    Map<String, dynamic>? result = await SovsMutation.createCandidate(context, description, electionUuid, title, userUuid);
+    getAllCandidatesFunction();
     notifyListeners();
     return result;
   }

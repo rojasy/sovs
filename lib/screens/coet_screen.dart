@@ -126,7 +126,7 @@ class _CoetScreenState extends State<CoetScreen> {
                                             showLoaderDialog(context);
 
                                             Map<String,dynamic>? output = await Provider.of<CandidateController>(context,listen: false).
-                                            addVote(context, candidateData.getAllCandidateByCategoryList[index].uuid, candidateData.getAllCandidateByCategoryList[index].election.uuid, 2024);
+                                            addVote(context, candidateData.getAllCandidateByCategoryCOETList[index].uuid, candidateData.getAllCandidateByCategoryCOETList[index].election.uuid, 2024);
 
                                             String message = output?['addVote']['message'];
                                             bool status = output?['addVote']['error'];

@@ -124,7 +124,7 @@ class _CobaScreenState extends State<CobaScreen> {
                                             showLoaderDialog(context);
 
                                             Map<String,dynamic>? output = await Provider.of<CandidateController>(context,listen: false).
-                                            addVote(context, candidateData.getAllCandidateByCategoryList[index].uuid, candidateData.getAllCandidateByCategoryList[index].election.uuid, 2024);
+                                            addVote(context, candidateData.getAllCandidateByCategoryCOBAList[index].uuid, candidateData.getAllCandidateByCategoryCOBAList[index].election.uuid, 2024);
 
                                             String message = output?['addVote']['message'];
                                             bool status = output?['addVote']['error'];

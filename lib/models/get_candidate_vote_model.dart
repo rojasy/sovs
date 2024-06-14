@@ -1,86 +1,103 @@
 // To parse this JSON data, do
 //
-//     final getAllCandidateByElectionCategoryResponse = getAllCandidateByElectionCategoryResponseFromJson(jsonString);
+//     final getCandidateVotesResponse = getCandidateVotesResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-GetAllCandidateByElectionCategoryResponse getAllCandidateByElectionCategoryResponseFromJson(String str) => GetAllCandidateByElectionCategoryResponse.fromJson(json.decode(str));
+GetCandidateVotesResponse getCandidateVotesResponseFromJson(String str) => GetCandidateVotesResponse.fromJson(json.decode(str));
 
-String getAllCandidateByElectionCategoryResponseToJson(GetAllCandidateByElectionCategoryResponse data) => json.encode(data.toJson());
+String getCandidateVotesResponseToJson(GetCandidateVotesResponse data) => json.encode(data.toJson());
 
-class GetAllCandidateByElectionCategoryResponse {
-  GetAllCandidateByElectionCategory getAllCandidateByElectionCategory;
+class GetCandidateVotesResponse {
+  GetCandidateVotes getCandidateVotes;
 
-  GetAllCandidateByElectionCategoryResponse({
-    required this.getAllCandidateByElectionCategory,
+  GetCandidateVotesResponse({
+    required this.getCandidateVotes,
   });
 
-  factory GetAllCandidateByElectionCategoryResponse.fromJson(Map<String, dynamic> json) => GetAllCandidateByElectionCategoryResponse(
-    getAllCandidateByElectionCategory: GetAllCandidateByElectionCategory.fromJson(json["getAllCandidateByElectionCategory"]),
+  factory GetCandidateVotesResponse.fromJson(Map<String, dynamic> json) => GetCandidateVotesResponse(
+    getCandidateVotes: GetCandidateVotes.fromJson(json["getCandidateVotes"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "getAllCandidateByElectionCategory": getAllCandidateByElectionCategory.toJson(),
+    "getCandidateVotes": getCandidateVotes.toJson(),
   };
 }
 
-class GetAllCandidateByElectionCategory {
-  List<CandidatesContent> content;
+class GetCandidateVotes {
+  int code;
+  bool error;
+  String message;
+  VotesCount data;
 
-  GetAllCandidateByElectionCategory({
-    required this.content,
+  GetCandidateVotes({
+    required this.code,
+    required this.error,
+    required this.message,
+    required this.data,
   });
 
-  factory GetAllCandidateByElectionCategory.fromJson(Map<String, dynamic> json) => GetAllCandidateByElectionCategory(
-    content: List<CandidatesContent>.from(json["content"].map((x) => CandidatesContent.fromJson(x))),
+  factory GetCandidateVotes.fromJson(Map<String, dynamic> json) => GetCandidateVotes(
+    code: json["code"],
+    error: json["error"],
+    message: json["message"],
+    data: VotesCount.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "content": List<dynamic>.from(content.map((x) => x.toJson())),
+    "code": code,
+    "error": error,
+    "message": message,
+    "data": data.toJson(),
   };
 }
 
-class CandidatesContent {
+class VotesCount {
+  bool active;
   String description;
   Election election;
   int id;
   String title;
-  String uuid;
+  int totalVotes;
   UserAccount userAccount;
-  int? totalVotes;
+  String uuid;
 
-  CandidatesContent({
+  VotesCount({
+    required this.active,
     required this.description,
     required this.election,
     required this.id,
     required this.title,
-    required this.uuid,
-    required this.userAccount,
     required this.totalVotes,
+    required this.userAccount,
+    required this.uuid,
   });
 
-  factory CandidatesContent.fromJson(Map<String, dynamic> json) => CandidatesContent(
+  factory VotesCount.fromJson(Map<String, dynamic> json) => VotesCount(
+    active: json["active"],
     description: json["description"],
     election: Election.fromJson(json["election"]),
     id: json["id"],
     title: json["title"],
-    uuid: json["uuid"],
-    userAccount: UserAccount.fromJson(json["userAccount"]),
     totalVotes: json["totalVotes"],
+    userAccount: UserAccount.fromJson(json["userAccount"]),
+    uuid: json["uuid"],
   );
 
   Map<String, dynamic> toJson() => {
+    "active": active,
     "description": description,
     "election": election.toJson(),
     "id": id,
     "title": title,
-    "uuid": uuid,
-    "userAccount": userAccount.toJson(),
     "totalVotes": totalVotes,
+    "userAccount": userAccount.toJson(),
+    "uuid": uuid,
   };
 }
 
 class Election {
+  bool active;
   String category;
   String description;
   int id;
@@ -89,6 +106,7 @@ class Election {
   int year;
 
   Election({
+    required this.active,
     required this.category,
     required this.description,
     required this.id,
@@ -98,6 +116,7 @@ class Election {
   });
 
   factory Election.fromJson(Map<String, dynamic> json) => Election(
+    active: json["active"],
     category: json["category"],
     description: json["description"],
     id: json["id"],
@@ -107,6 +126,7 @@ class Election {
   );
 
   Map<String, dynamic> toJson() => {
+    "active": active,
     "category": category,
     "description": description,
     "id": id,
@@ -118,48 +138,56 @@ class Election {
 
 class UserAccount {
   bool active;
+  String email;
   String firstName;
   String fullName;
   int id;
   String lastName;
+  dynamic middleName;
+  String password;
   String phone;
   String username;
   String uuid;
-  String email;
 
   UserAccount({
     required this.active,
+    required this.email,
     required this.firstName,
     required this.fullName,
     required this.id,
     required this.lastName,
+    required this.middleName,
+    required this.password,
     required this.phone,
     required this.username,
     required this.uuid,
-    required this.email,
   });
 
   factory UserAccount.fromJson(Map<String, dynamic> json) => UserAccount(
     active: json["active"],
+    email: json["email"],
     firstName: json["firstName"],
     fullName: json["fullName"],
     id: json["id"],
     lastName: json["lastName"],
+    middleName: json["middleName"],
+    password: json["password"],
     phone: json["phone"],
     username: json["username"],
     uuid: json["uuid"],
-    email: json["email"],
   );
 
   Map<String, dynamic> toJson() => {
     "active": active,
+    "email": email,
     "firstName": firstName,
     "fullName": fullName,
     "id": id,
     "lastName": lastName,
+    "middleName": middleName,
+    "password": password,
     "phone": phone,
     "username": username,
     "uuid": uuid,
-    "email": email,
   };
 }

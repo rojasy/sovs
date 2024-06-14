@@ -88,7 +88,7 @@ class _HomeState extends State<Home> {
                     children: [
                       CircleAvatar(
                         // backgroundColor:primaryColor.withOpacity(0.5),
-                        child: Text("RN"),
+                        child: Text("YJ"),
                       )
                     ],
                   ),

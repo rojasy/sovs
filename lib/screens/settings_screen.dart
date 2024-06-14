@@ -39,7 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'Rojasy Ngaiza',
+                        'Yusuph Jumbe',
                         // style: normalStyle,
                       ),
                       Text(

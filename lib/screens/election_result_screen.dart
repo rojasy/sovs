@@ -25,9 +25,9 @@ class _ElectionResultScreenState extends State<ElectionResultScreen> {
              children: [
                Row(
                  children: [
-                   Text("Name: Rojasy Ngaiza",style: TextStyle(color: primaryColor,fontFamily: "Poppins"),),
+                   Text("Name: Yusuph Jumbe",style: TextStyle(color: primaryColor,fontFamily: "Poppins"),),
                    SizedBox(width: 10,),
-                   Text("COBA"),
+                   Text("COET"),
                  ],
                ),
                Row(

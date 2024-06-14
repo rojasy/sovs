@@ -8,6 +8,7 @@ import '../models/all_election_model.dart';
 import '../models/get_all_candidates_model.dart';
 import '../models/get_all_users_model.dart';
 import '../models/get_candidate_by_category_model.dart';
+import '../models/get_candidate_vote_model.dart';
 import '../models/logged_in_user_model.dart';
 
 class SovsQueriesServices {
@@ -143,6 +144,7 @@ class SovsQueriesServices {
         uuid
         email
       }
+      totalVotes
     }
   }
 }
@@ -193,6 +195,7 @@ class SovsQueriesServices {
         uuid
         email
       }
+      totalVotes
     }
   }
 }
@@ -243,6 +246,7 @@ class SovsQueriesServices {
         uuid
         email
       }
+      totalVotes
     }
   }
 }
@@ -351,6 +355,66 @@ class SovsQueriesServices {
       GetAllCandidatesResponse getAllCandidatesResponse =
       getAllCandidatesResponseFromJson(jsonEncode(result.data));
       return getAllCandidatesResponse;
+    }
+  }
+
+
+  Future<GetCandidateVotesResponse> getCandidatesVote(String candidateUuid,String electionUuid) async {
+    final GraphQLClient authorizedClient = await initGraphQLClient();
+    QueryResult result = await authorizedClient.query(
+      QueryOptions(document: parseString("""
+           query GetCandidateVotes(\$totalVotes: TotalVotesDtoInput) {
+  getCandidateVotes(totalVotes: \$totalVotes) {
+    code
+    error
+    message
+    data {
+      active
+      description
+      election {
+        active
+        category
+        description
+        id
+        name
+        uuid
+        year
+      }
+      id
+      title
+      totalVotes
+      userAccount {
+        active
+        email
+        firstName
+        fullName
+        id
+        lastName
+        middleName
+        password
+        phone
+        username
+        uuid
+      }
+      uuid
+    }
+  }
+}
+  """),variables: {
+        "totalVotes": {
+          "candidateUuid": candidateUuid,
+          "electionUuid": electionUuid
+        }
+      }),
+    );
+
+    print(result);
+    if (result.hasException) {
+      throw Exception(result.exception);
+    } else {
+      GetCandidateVotesResponse getCandidateVotesResponse =
+      getCandidateVotesResponseFromJson(jsonEncode(result.data));
+      return getCandidateVotesResponse;
     }
   }
 }

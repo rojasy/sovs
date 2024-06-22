@@ -4,6 +4,7 @@ import 'package:sovs/controllers/logged_in_user_controller.dart';
 import 'package:sovs/screens/welcome_screen.dart';
 import '../screens/login_screen.dart';
 import 'controllers/candidate_controller.dart';
+import 'controllers/dashboard_controller.dart';
 import 'controllers/election_controller.dart';
 import 'controllers/users_controller.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => GetAllElectionController()),
         ChangeNotifierProvider(create: (context) => CandidateController()),
         ChangeNotifierProvider(create: (context) => GetUsersController()),
+        ChangeNotifierProvider(create: (context) => DashboardController()),
       ],
       child: MaterialApp(
         title: 'Smart Voting System',

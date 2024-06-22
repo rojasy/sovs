@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/election_controller.dart';
 import '../utils/constants.dart';
 import 'add_election_screen.dart';
+import 'election_details_screen.dart';
 
 class ElectionScreen extends StatefulWidget {
   const ElectionScreen({super.key});
@@ -39,39 +41,45 @@ class _ElectionScreenState extends State<ElectionScreen> {
           ),
           SizedBox(height: 10,),
           Expanded(
-              child: Consumer<GetAllElectionController>(
-                builder: (context,electionData,_){
-                  // if (!loadedStakeholder) {
-                  //   stakeholderData.getProjectStakeholdersFunction(widget.projectUniqueId);
-                  //   print(stakeholderData.getProjectStakeholderList.length);
-                  //   loadedStakeholder = true;
-                  // }
-                  return electionData.dataLoading == true ? Center(child: CircularProgressIndicator(),) : electionData.getAllElection.isEmpty ? Center(child: Text("No stakeholder"),): ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: electionData.getAllElection.length,
-                      itemBuilder: (context,index){
-                        return Column(
-                          children: [
-                            Material(
-                              elevation:4,
-                              child: Expanded(
-                                child: ListTile(
-                                  title:
-                                    Flexible(
-                                      child: Text(
-                                          "Title: ${electionData.getAllElection[index].name}",
-                                          // style: detailsStyle
-                                      ),
-                                    ), subtitle: Text("Category: ${electionData.getAllElection[index].category}"),
-
-                                ),
-                              ),
+            child: Consumer<GetAllElectionController>(
+              builder: (context,electionData,_){
+                // if (!loadedStakeholder) {
+                //   stakeholderData.getProjectStakeholdersFunction(widget.projectUniqueId);
+                //   print(stakeholderData.getProjectStakeholderList.length);
+                //   loadedStakeholder = true;
+                // }
+                return electionData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
+                electionData.getAllElection.isEmpty ? Center(child: Text("No stakeholder"),):
+                ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: electionData.getAllElection.length,
+                    itemBuilder: (context,index){
+                      return Column(
+                        children: [
+                          Material(
+                            elevation:4,
+                            child: ListTile(
+                              title:
+                                Text(
+                                    "Title: ${electionData.getAllElection[index].name}",
+                                    // style: detailsStyle
+                                ), subtitle: Text("Category: ${electionData.getAllElection[index].category}"),
+                              trailing: IconButton(onPressed: (){},icon: Icon(Icons.delete),color: errorColor,),
+                              onTap: (){
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context)=>
+                                        ElectionDetailScreen(uniqueId: '${electionData.getAllElection[index].uuid}',
+                                          title: '${electionData.getAllElection[index].name}',
+                                          category: '${electionData.getAllElection[index].category}', year: '${electionData.getAllElection[index].year}', description: '${electionData.getAllElection[index].description}',)));
+                              },
                             ),
-                          ],
-                        );
-                      });
-                },
-              )),
+                          ),
+                        ],
+                      );
+                    });
+              },
+            ),
+          ),
         ],
       ),
     );

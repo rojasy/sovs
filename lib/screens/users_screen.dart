@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sovs/screens/user_details_screen.dart';
 
 import '../controllers/users_controller.dart';
 import '../utils/constants.dart';
@@ -67,7 +68,12 @@ class _UsersScreenState extends State<UsersScreen> {
                             ),
                             Row(
                               children: [
-                                IconButton(onPressed: (){}, icon: Icon(Icons.visibility)),
+                                IconButton(onPressed: (){
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context)=>UserDetailsScreen(fullname: '${userData.getAllUser[index].fullName}',
+                                        uniqueId: '${userData.getAllUser[index].uuid}', gender: '${userData.getAllUser[index].lastName}', email: '${userData.getAllUser[index].email}',
+                                        phone: '${userData.getAllUser[index].phone}',)));
+                                }, icon: Icon(Icons.visibility)),
                                 IconButton(onPressed: (){
                                   showDialog(
                                       barrierDismissible: false,

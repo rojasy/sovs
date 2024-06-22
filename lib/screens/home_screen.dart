@@ -4,12 +4,15 @@ import 'package:sovs/controllers/logged_in_user_controller.dart';
 import 'package:sovs/screens/coba_screen.dart';
 import 'package:sovs/screens/coet_screen.dart';
 import 'package:sovs/screens/presidential_screen.dart';
+import 'package:sovs/screens/profile_screen.dart';
 import 'package:sovs/screens/settings_screen.dart';
 import 'package:sovs/utils/constants.dart';
 
+import '../config/authentication.dart';
 import '../controllers/election_controller.dart';
 import 'collage_screen.dart';
 import 'election_result_screen.dart';
+import 'login_screen.dart';
 import 'notification_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -64,6 +67,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  String getInitials(String fullName) {
+    List<String> nameParts = fullName.split(" ");
+    String initials = "";
+    for (var part in nameParts) {
+      if (part.isNotEmpty) {
+        initials += part[0];
+      }
+    }
+    return initials;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,14 +98,45 @@ class _HomeState extends State<Home> {
               child: Column(
                 children: [
                   SizedBox(height: 60,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CircleAvatar(
-                        // backgroundColor:primaryColor.withOpacity(0.5),
-                        child: Text("YJ"),
-                      )
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            await Oauth2Httprequest.logout();
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>LoginScreen()));
+
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: secondaryColor,
+                              child: Icon(Icons.logout_outlined,color: errorColor,))
+                        ),
+                        Expanded(child: SizedBox()),
+                        InkWell(
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfileScreen()));
+
+                          },
+                          child: Consumer<GetLoggedInUserController>(
+                            builder: (context,profileData,_){
+                              String fullName = profileData.getLoggedUser?.fullName ?? "";
+                              String initials = getInitials(fullName);
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  CircleAvatar(
+                                    // backgroundColor:primaryColor.withOpacity(0.5),
+                                    child: Text("${initials}"),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+
+                      ],
+                    ),
                   ),
                   SizedBox(height: 50,),
                   Row(

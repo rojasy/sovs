@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 
 import '../utils/constants.dart';
 
-class CandidateDetailsScreen extends StatefulWidget {
+class ElectionDetailScreen extends StatefulWidget {
   String title;
+  String uniqueId;
+  String category;
   String description;
-  String name;
-   CandidateDetailsScreen({required this.title,required this.name,required this.description,super.key});
+  String year;
+   ElectionDetailScreen({required this.uniqueId,required this.title,required this.category,required this.description,required this.year,super.key});
 
   @override
-  State<CandidateDetailsScreen> createState() => _CandidateDetailsScreenState();
+  State<ElectionDetailScreen> createState() => _ElectionDetailScreenState();
 }
 
-class _CandidateDetailsScreenState extends State<CandidateDetailsScreen> {
+class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Candidate Details",style: TextStyle(color: whiteColor,fontFamily: "Poppins"),),centerTitle: true,backgroundColor: primaryColor,iconTheme: IconThemeData(color: whiteColor)),
+      appBar: AppBar(title: Text("Election Details",style: TextStyle(color: whiteColor,fontFamily: "Poppins"),),centerTitle: true,backgroundColor: primaryColor,iconTheme: IconThemeData(color: whiteColor)),
       body: Column(
         children: [
           Padding(
@@ -36,58 +38,7 @@ class _CandidateDetailsScreenState extends State<CandidateDetailsScreen> {
                       children: [
                         Expanded(
                             child: Text(
-                              "Candidate :",
-                              overflow: TextOverflow.clip,
-                              style: detailsStyleWithBold,
-                            )),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width *
-                        0.5,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Container(
-                              child: Padding(
-                                padding:
-                                const EdgeInsets.all(8.0),
-                                child: Text(
-                                  widget.name,
-                                ),
-                              ),
-                            )),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              24.0,
-              24.0,
-              24.0,
-              0,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width *
-                        0.4,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                              "Policy Title :",
+                              "Title :",
                               overflow: TextOverflow.clip,
                               style: detailsStyleWithBold,
                             )),
@@ -118,9 +69,6 @@ class _CandidateDetailsScreenState extends State<CandidateDetailsScreen> {
               ],
             ),
           ),
-          SizedBox(
-            height: 8,
-          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(
               24.0,
@@ -138,7 +86,7 @@ class _CandidateDetailsScreenState extends State<CandidateDetailsScreen> {
                       children: [
                         Expanded(
                             child: Text(
-                              "Policy Summary :",
+                              "Description :",
                               overflow: TextOverflow.clip,
                               style: detailsStyleWithBold,
                             )),
@@ -169,6 +117,103 @@ class _CandidateDetailsScreenState extends State<CandidateDetailsScreen> {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              24.0,
+              24.0,
+              24.0,
+              0,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.4,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Text(
+                              "Category :",
+                              overflow: TextOverflow.clip,
+                              style: detailsStyleWithBold,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.5,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Container(
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.all(8.0),
+                                child: Text(
+                                  widget.category,
+                                ),
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              24.0,
+              24.0,
+              24.0,
+              0,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.4,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Text(
+                              "Year :",
+                              overflow: TextOverflow.clip,
+                              style: detailsStyleWithBold,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.5,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Container(
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.all(8.0),
+                                child: Text(
+                                  widget.year,
+                                ),
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
           SizedBox(height: 20,),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -179,7 +224,7 @@ class _CandidateDetailsScreenState extends State<CandidateDetailsScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   )
               ),
-              onPressed: (){}, child: Text("Update Candidate",style: TextStyle(color: whiteColor,fontSize: 16),)),
+              onPressed: (){}, child: Text("Update Election",style: TextStyle(color: whiteColor,fontSize: 16),)),
         ],
       ),
     );

@@ -9,6 +9,7 @@ import '../models/get_all_candidates_model.dart';
 import '../models/get_all_users_model.dart';
 import '../models/get_candidate_by_category_model.dart';
 import '../models/get_candidate_vote_model.dart';
+import '../models/get_dashboard_model.dart';
 import '../models/logged_in_user_model.dart';
 
 class SovsQueriesServices {
@@ -415,6 +416,43 @@ class SovsQueriesServices {
       GetCandidateVotesResponse getCandidateVotesResponse =
       getCandidateVotesResponseFromJson(jsonEncode(result.data));
       return getCandidateVotesResponse;
+    }
+  }
+
+  Future<GetDashboardResponse> getDashboard() async {
+    final GraphQLClient authorizedClient = await initGraphQLClient();
+    QueryResult result = await authorizedClient.query(
+      QueryOptions(document: parseString("""
+           query GetDashboard {
+  getDashboard {
+    code
+    data {
+      candidates
+      elections
+      users
+      votes
+    }
+    dataList {
+      candidates
+      elections
+      users
+      votes
+    }
+    error
+    message
+  }
+}
+  """),
+      ),
+    );
+
+    print(result);
+    if (result.hasException) {
+      throw Exception(result.exception);
+    } else {
+      GetDashboardResponse getDashboardResponse =
+      getDashboardResponseFromJson(jsonEncode(result.data));
+      return getDashboardResponse;
     }
   }
 }

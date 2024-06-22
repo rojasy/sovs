@@ -9,6 +9,7 @@ import '../controllers/users_controller.dart';
 import '../models/get_all_users_model.dart';
 import '../utils/constants.dart';
 import 'add_candidate_screen.dart';
+import 'candidate_details_screen.dart';
 
 class CandidateScreen extends StatefulWidget {
   const CandidateScreen({super.key});
@@ -167,7 +168,14 @@ class _CandidateScreenState extends State<CandidateScreen> {
                           ),
                           Row(
                             children: [
-                              IconButton(onPressed: (){}, icon: Icon(Icons.visibility)),
+                              IconButton(onPressed: (){
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context)=>
+                                        CandidateDetailsScreen(title: '${candidateData.getAllCandidatesList[index].title}',
+                                          name: '${candidateData.getAllCandidatesList[index].userAccount.fullName}',
+                                          description: '${candidateData.getAllCandidatesList[index].description}',)));
+
+                              }, icon: Icon(Icons.visibility)),
                               IconButton(onPressed: (){
                                 showDialog(
                                     barrierDismissible: false,

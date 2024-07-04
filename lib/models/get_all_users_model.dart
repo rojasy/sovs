@@ -44,13 +44,14 @@ class AllUsers {
   bool active;
   String email;
   String firstName;
-  int? id;
+  int id;
   String lastName;
   dynamic middleName;
   String phone;
   String uuid;
   String username;
   String fullName;
+  String? courses;
 
   AllUsers({
     required this.active,
@@ -63,6 +64,7 @@ class AllUsers {
     required this.uuid,
     required this.username,
     required this.fullName,
+    required this.courses,
   });
 
   factory AllUsers.fromJson(Map<String, dynamic> json) => AllUsers(
@@ -76,6 +78,7 @@ class AllUsers {
     uuid: json["uuid"],
     username: json["username"],
     fullName: json["fullName"],
+    courses: json["courses"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -89,5 +92,6 @@ class AllUsers {
     "uuid": uuid,
     "username": username,
     "fullName": fullName,
+    "courses": courses,
   };
 }

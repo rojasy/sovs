@@ -1,32 +1,62 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sovs/controllers/candidate_controller.dart';
 
+import '../controllers/candidate_controller.dart';
 import '../controllers/election_controller.dart';
 import '../controllers/users_controller.dart';
 import '../models/all_election_model.dart';
 import '../models/get_all_users_model.dart';
 import '../utils/constants.dart';
 
-class AddCandidateScreen extends StatefulWidget {
-  const AddCandidateScreen({super.key});
+class UpdateCandidateScreen extends StatefulWidget {
+  String title;
+  String description;
+  String name;
+  String uuid;
+  String userUuid;
+  String electionUuid;
+  UpdateCandidateScreen({required this.title, required this.description,
+    required this.name,required this.uuid,required this.userUuid,required this.electionUuid,super.key});
 
   @override
-  State<AddCandidateScreen> createState() => _AddCandidateScreenState();
+  State<UpdateCandidateScreen> createState() => _UpdateCandidateScreenState();
 }
 
-class _AddCandidateScreenState extends State<AddCandidateScreen> {
+class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
+
 
   String userValue = "";
   String electionValue = "";
   String categoryValue = "";
 
+  late TextEditingController titleController;
+  late TextEditingController descriptionController;
+
   TextEditingController searchController = TextEditingController();
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
 
   ScrollController scrollController = ScrollController();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    titleController = TextEditingController(text: widget.title);
+    descriptionController = TextEditingController(text: widget.description);
+    userValue = widget.userUuid;
+    electionValue = widget.electionUuid;
+
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
@@ -35,7 +65,7 @@ class _AddCandidateScreenState extends State<AddCandidateScreen> {
           const CircularProgressIndicator(),
           Container(
               margin: const EdgeInsets.only(left: 7),
-              child: Text("Loading!!")),
+              child: Text("Updating Candidate")),
         ],
       ),
     );
@@ -51,7 +81,7 @@ class _AddCandidateScreenState extends State<AddCandidateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Add Candidate",style: TextStyle(color: whiteColor,fontFamily: "Poppins"),),centerTitle: true,backgroundColor: primaryColor,iconTheme: IconThemeData(color: whiteColor)),
+      appBar: AppBar(title: Text("Edit Candidate",style: TextStyle(color: whiteColor,fontFamily: "Poppins"),),centerTitle: true,backgroundColor: primaryColor,iconTheme: IconThemeData(color: whiteColor)),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -85,6 +115,11 @@ class _AddCandidateScreenState extends State<AddCandidateScreen> {
                       borderSide: BorderSide.none
                   )
               ),
+              onChanged: (value) {
+                setState(() {
+                  widget.title = value;
+                });
+              },
             ),
             SizedBox(height: 20,),
             TextFormField(
@@ -101,6 +136,11 @@ class _AddCandidateScreenState extends State<AddCandidateScreen> {
                       borderSide: BorderSide.none
                   )
               ),
+              onChanged: (value) {
+                setState(() {
+                  widget.description = value;
+                });
+              },
             ),
             SizedBox(height: 20,),
             ElevatedButton(
@@ -117,10 +157,10 @@ class _AddCandidateScreenState extends State<AddCandidateScreen> {
                   showLoaderDialog(context);
 
                   Map<String,dynamic>? output = await Provider.of<CandidateController>(context, listen: false).
-                  createCandidate(context, descriptionController.text, electionValue, titleController.text, userValue);
+                  updateCandidate(context, descriptionController.text, electionValue, titleController.text, userValue, widget.uuid);
 
-                  String message = output?['createCandidate']['message'];
-                  bool error = output?['createCandidate']['error'];
+                  String message = output?['updateCandidate']['message'];
+                  bool error = output?['updateCandidate']['error'];
 
                   if(error == false){
                     Navigator.pop(context);
@@ -144,7 +184,7 @@ class _AddCandidateScreenState extends State<AddCandidateScreen> {
                         .pop();
                   }
 
-                }, child: Text("Add Candidate",style: TextStyle(color: whiteColor),))
+                }, child: Text("Update Candidate",style: TextStyle(color: whiteColor),))
           ],
         ),
       ),
@@ -178,6 +218,7 @@ class _AddCandidateScreenState extends State<AddCandidateScreen> {
               borderRadius: BorderRadius.circular(15),
             )),
         hint: Text("Select User"),
+        value: userValue.isNotEmpty ? userValue : null,
         items: items
             .map((item) => DropdownMenuItem<String>(
           value: item.uuid,
@@ -311,6 +352,7 @@ class _AddCandidateScreenState extends State<AddCandidateScreen> {
               borderRadius: BorderRadius.circular(15),
             )),
         hint: Text("Select Election"),
+        value: electionValue.isNotEmpty ? electionValue : null,
         items: items
             .map((item) => DropdownMenuItem<String>(
           value: item.uuid,
@@ -416,88 +458,4 @@ class _AddCandidateScreenState extends State<AddCandidateScreen> {
     );
   }
 
-
-  Widget _buildDropdownElectionCategoryButton(List<ElectionCategory> items) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      // padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-      child: DropdownButtonFormField2<String>(
-        isExpanded: true,
-        decoration: InputDecoration(
-            hintText: "Select Category",
-            // Add Horizontal padding using menuItemStyleData.padding so it matches
-            // the menu padding when button's width is not specified.
-            contentPadding: const EdgeInsets.symmetric(vertical: 10),
-            border: const OutlineInputBorder(
-              // borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide.none,
-            ),
-            fillColor: Colors.white,
-            filled: true,
-            // Add more decoration..
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.black),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.black),
-              borderRadius: BorderRadius.circular(15),
-            )),
-        hint: Text("Select Category"),
-        items: items
-            .map((item) => DropdownMenuItem<String>(
-          value: item.name,
-          child: Text(item.name,
-            style: const TextStyle(color: Colors.black),
-          ),
-        ))
-            .toList(),
-        validator: (value) {
-          if (value == null) {
-            return "Category needed";
-          }
-          return null;
-        },
-        onChanged: (value) {
-          setState(() {
-            categoryValue = value!;
-            // dropdownValue = value;
-          });
-          //_controller.getFinancialHighLeastProjectConsumingRateGraph(selectedValue);
-          //Do something when selected item is changed.
-        },
-        onSaved: (value) {
-          setState(() {
-            categoryValue = value.toString();
-          });
-          // dropdownValue = value.toString();
-        },
-        buttonStyleData: const ButtonStyleData(
-          padding: EdgeInsets.only(right: 8),
-        ),
-        iconStyleData: const IconStyleData(
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: Colors.black45,
-          ),
-          iconSize: 24,
-        ),
-        dropdownStyleData: DropdownStyleData(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(0),
-          ),
-        ),
-        menuItemStyleData: const MenuItemStyleData(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-        ),
-      ),
-    );
-  }
-
-}
-
-enum ElectionCategory{
-  COBA_PARLIAMENT,
-  COET_PARLIAMENT,
-  PRESIDENT
 }

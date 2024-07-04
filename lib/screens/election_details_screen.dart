@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sovs/screens/update_election_screen.dart';
 
 import '../utils/constants.dart';
 
@@ -8,7 +9,8 @@ class ElectionDetailScreen extends StatefulWidget {
   String category;
   String description;
   String year;
-   ElectionDetailScreen({required this.uniqueId,required this.title,required this.category,required this.description,required this.year,super.key});
+   ElectionDetailScreen({required this.uniqueId,required this.title,
+     required this.category,required this.description,required this.year,super.key});
 
   @override
   State<ElectionDetailScreen> createState() => _ElectionDetailScreenState();
@@ -224,7 +226,14 @@ class _ElectionDetailScreenState extends State<ElectionDetailScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   )
               ),
-              onPressed: (){}, child: Text("Update Election",style: TextStyle(color: whiteColor,fontSize: 16),)),
+              onPressed: (){
+
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context)=>
+                        UpdateElectionScreen(uniqueId: '${widget.uniqueId}', title: '${widget.title}',
+                          category: '${widget.category}', description: '${widget.description}', year: '${widget.year}',)));
+
+              }, child: Text("Update Election",style: TextStyle(color: whiteColor,fontSize: 16),)),
         ],
       ),
     );

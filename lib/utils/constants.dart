@@ -22,4 +22,4 @@ final normalStyleWithPrimaryWithBigFont = TextStyle(fontFamily: 'Poppins',fontSi
 
 
 
-const String graphqlUrl = 'http://172.17.20.83:8078';
+const String graphqlUrl = 'http://172.17.20.223:8078';

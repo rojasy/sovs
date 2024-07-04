@@ -29,4 +29,10 @@ class DashboardController extends ChangeNotifier{
       print(err.toString());
     }
   }
+
+
+  refreshData() async {
+    await getDashboardFunction();
+  }
+
 }

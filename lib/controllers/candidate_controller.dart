@@ -126,10 +126,9 @@ class CandidateController extends ChangeNotifier{
   Future<Map<String, dynamic>?> addVote(
       BuildContext context,
       String? candidateUuid,
-      String? electionUuid,
-      int year
+      String? electionUuid
       ) async {
-    Map<String, dynamic>? result = await SovsMutation.addVote(context, candidateUuid, electionUuid, year);
+    Map<String, dynamic>? result = await SovsMutation.addVote(context, candidateUuid, electionUuid);
     notifyListeners();
     return result;
   }
@@ -146,17 +145,70 @@ class CandidateController extends ChangeNotifier{
     return result;
   }
 
-
-      refreshCOBAData() async {
-        await getAllCandidateByElectionCategoryCOBA();
+      Future<Map<String, dynamic>?> updateCandidate(
+          BuildContext context,
+          String? description, String? electionUuid,String? title,String? userUuid,String? uuid
+          ) async {
+        Map<String, dynamic>? result = await SovsMutation.updateCandidate(context, description, electionUuid, title, userUuid, uuid);
+        getAllCandidatesFunction();
+        notifyListeners();
+        return result;
       }
 
-      refreshCOETData() async {
-        await getAllCandidateByElectionCategoryCOET();
+      Future<Map<String, dynamic>?> deleteCandidate(
+          BuildContext context,
+          String? uuid
+          ) async {
+        Map<String, dynamic>? result = await SovsMutation.deleteCandidate(context, uuid);
+        getAllCandidatesFunction();
+        notifyListeners();
+        return result;
       }
 
-      refreshPresidentData() async {
-        await getAllCandidateByElectionCategoryPresident();
+
+      // refreshCOBAData() async {
+      //   await getAllCandidateByElectionCategoryCOBA();
+      // }
+      //
+      // refreshCOETData() async {
+      //   await getAllCandidateByElectionCategoryCOET();
+      // }
+
+      // refreshPresidentData() async {
+      //   await getAllCandidateByElectionCategoryPresident();
+      // }
+
+      Future<void> refreshPresidentData() async {
+        dataLoading = true;
+        notifyListeners();
+
+        // Fetch the latest candidate data here
+        _getAllCandidateByCategoryList = await getAllCandidateByElectionCategoryPresident();
+
+        dataLoading = false;
+        notifyListeners();
+      }
+
+      Future<void> refreshCOBAData() async {
+        dataLoading = true;
+        notifyListeners();
+
+        // Fetch the latest candidate data here
+        _getAllCandidateByCategoryCOBAList = await getAllCandidateByElectionCategoryCOBA();
+
+        dataLoading = false;
+        notifyListeners();
+      }
+
+      Future<void> refreshCOETData() async {
+        dataLoading = true;
+        notifyListeners();
+
+        // Fetch the latest candidate data here
+        _getAllCandidateByCategoryCOETList = await getAllCandidateByElectionCategoryCOET();
+
+        dataLoading = false;
+        notifyListeners();
       }
 
 }

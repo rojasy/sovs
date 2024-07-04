@@ -36,9 +36,38 @@ class GetUsersController extends ChangeNotifier {
       String? firstName,
       String? lastName,
       String? phoneNumber,
-      String? username
+      String? username,
+      String? course
       ) async {
-    Map<String, dynamic>? result = await SovsMutation.createUser(context, email, firstName, lastName, phoneNumber, username);
+    Map<String, dynamic>? result = await SovsMutation.createUser(context, email, firstName, lastName, phoneNumber, username,course);
+    getAllUsersFunction();
+    notifyListeners();
+    return result;
+  }
+
+
+  Future<Map<String, dynamic>?> updateUser(
+      BuildContext context,
+      String? email,
+      String? firstName,
+      String? lastName,
+      String? phoneNumber,
+      String? username,
+      String? course,
+      String? uuid
+      ) async {
+    Map<String, dynamic>? result = await SovsMutation.updateUser(context, uuid, email, firstName, lastName, phoneNumber, username, course);
+    getAllUsersFunction();
+    notifyListeners();
+    return result;
+  }
+
+
+  Future<Map<String, dynamic>?> deleteUser(
+      BuildContext context,
+      String? uuid
+      ) async {
+    Map<String, dynamic>? result = await SovsMutation.deleteUser(context, uuid);
     getAllUsersFunction();
     notifyListeners();
     return result;

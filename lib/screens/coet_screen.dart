@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sovs/screens/view_candidate_screen.dart';
 
 import '../controllers/candidate_controller.dart';
 import '../utils/constants.dart';
@@ -78,7 +79,7 @@ class _CoetScreenState extends State<CoetScreen> {
                             SizedBox(width: 10,),
                             Flexible(child: Text("${candidateData.getAllCandidateByCategoryCOETList[index].election.category}")),
                             SizedBox(width: 10,),
-                            Flexible(child: Text("${candidateData.getAllCandidateByCategoryCOETList[index].totalVotes == null ? 0 : candidateData.getAllCandidateByCategoryCOBAList[index].totalVotes }",style: TextStyle(fontSize: 20),)),
+                            Flexible(child: Text("${candidateData.getAllCandidateByCategoryCOETList[index].totalVotes }",style: TextStyle(fontSize: 20),)),
                           ],
                         ),
                       ),
@@ -87,9 +88,9 @@ class _CoetScreenState extends State<CoetScreen> {
                           IconButton(onPressed: (){
                             Navigator.of(context).push(
                                 MaterialPageRoute(builder: (context)=>
-                                    CandidateDetailsScreen(title: '${candidateData.getAllCandidateByCategoryCOETList[index].title}',
+                                    ViewCandidateScreen(title: '${candidateData.getAllCandidateByCategoryCOETList[index].title}',
                                       name: '${candidateData.getAllCandidateByCategoryCOETList[index].userAccount.fullName}',
-                                      description: '${candidateData.getAllCandidateByCategoryCOETList[index].description}',)));
+                                      description: '${candidateData.getAllCandidateByCategoryCOETList[index].description}', uuid: '${candidateData.getAllCandidateByCategoryCOETList[index].uuid}',)));
                           }, icon: Icon(Icons.visibility)),
                           IconButton(onPressed: (){
                             showDialog(
@@ -126,12 +127,13 @@ class _CoetScreenState extends State<CoetScreen> {
                                             showLoaderDialog(context);
 
                                             Map<String,dynamic>? output = await Provider.of<CandidateController>(context,listen: false).
-                                            addVote(context, candidateData.getAllCandidateByCategoryCOETList[index].uuid, candidateData.getAllCandidateByCategoryCOETList[index].election.uuid, 2024);
+                                            addVote(context, candidateData.getAllCandidateByCategoryCOETList[index].uuid, candidateData.getAllCandidateByCategoryCOETList[index].election.uuid);
 
                                             String message = output?['addVote']['message'];
                                             bool status = output?['addVote']['error'];
 
                                             if(status == false){
+                                              await candidateData.refreshCOETData();
                                               Navigator.of(context).pop();
                                               ScaffoldMessenger.of(
                                                   context)

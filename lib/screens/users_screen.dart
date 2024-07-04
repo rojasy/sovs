@@ -14,6 +14,27 @@ class UsersScreen extends StatefulWidget {
 }
 
 class _UsersScreenState extends State<UsersScreen> {
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          const CircularProgressIndicator(),
+          Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: Text("Deleting User")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +84,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               children: [
                                 Text("Name: ${userData.getAllUser[index].fullName}",style: TextStyle(color: primaryColor,fontFamily: "Poppins"),),
                                 SizedBox(width: 10,),
-                                Text("COBA"),
+                                Text("${userData.getAllUser[index].courses ?? "N/A"}",style: TextStyle(color: primaryColor,fontFamily: "Poppins"),),
                               ],
                             ),
                             Row(
@@ -72,7 +93,8 @@ class _UsersScreenState extends State<UsersScreen> {
                                   Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context)=>UserDetailsScreen(fullname: '${userData.getAllUser[index].fullName}',
                                         uniqueId: '${userData.getAllUser[index].uuid}', gender: '${userData.getAllUser[index].lastName}', email: '${userData.getAllUser[index].email}',
-                                        phone: '${userData.getAllUser[index].phone}',)));
+                                        phone: '${userData.getAllUser[index].phone}', course: '${userData.getAllUser[index].courses}', firstname: '${userData.getAllUser[index].firstName}',
+                                        lastname: '${userData.getAllUser[index].lastName}', username: '${userData.getAllUser[index].username}',)));
                                 }, icon: Icon(Icons.visibility)),
                                 IconButton(onPressed: (){
                                   showDialog(
@@ -104,7 +126,38 @@ class _UsersScreenState extends State<UsersScreen> {
                                                       borderRadius: BorderRadius.all(Radius.circular(10)),
                                                     )
                                                 ),
-                                                onPressed: (){}, child: Text("Yes",style: TextStyle(color: whiteColor),)),
+                                                onPressed: () async {
+
+                                                  showLoaderDialog(context);
+
+                                                  Map<String,dynamic>? output = await Provider.of<GetUsersController>(context, listen: false).deleteUser(context, userData.getAllUser[index].uuid);
+
+                                                  String message = output?['deleteUser']['message'];
+                                                  bool error = output?['deleteUser']['error'];
+
+                                                  if(error == false){
+                                                    Navigator.pop(context);
+                                                    ScaffoldMessenger.of(
+                                                        context)
+                                                        .showSnackBar(
+                                                        SnackBar(content: Text(message)));
+                                                    Navigator.of(
+                                                        context)
+                                                        .pop();
+
+                                                  }else{
+                                                    Navigator.pop(context);
+
+                                                    ScaffoldMessenger.of(
+                                                        context)
+                                                        .showSnackBar(
+                                                        SnackBar(content: Text(message),backgroundColor: errorColor,));
+                                                    Navigator.of(
+                                                        context)
+                                                        .pop();
+                                                  }
+
+                                                }, child: Text("Yes",style: TextStyle(color: whiteColor),)),
 
                                           ],
                                         );

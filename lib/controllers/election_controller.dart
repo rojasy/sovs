@@ -41,4 +41,26 @@ class GetAllElectionController extends ChangeNotifier{
   }
 
 
+  Future<Map<String, dynamic>?> updateElection(
+      BuildContext context,
+      String? category, String? description,String? name,int year,String? uuid
+      ) async {
+    Map<String, dynamic>? result = await SovsMutation.updateElection(context, category, description, name, year, uuid);
+    getAllElectionFunction();
+    notifyListeners();
+    return result;
+  }
+
+
+  Future<Map<String, dynamic>?> deleteElection(
+      BuildContext context,
+      String? uuid
+      ) async {
+    Map<String, dynamic>? result = await SovsMutation.deleteElection(context, uuid);
+    getAllElectionFunction();
+    notifyListeners();
+    return result;
+  }
+
+
 }

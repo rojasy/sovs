@@ -52,7 +52,7 @@ class _ElectionResultScreenState extends State<ElectionResultScreen> {
                          children: [
                            Text("${presidentData.getAllCandidateByCategoryList[index].userAccount.fullName}"),
                            Expanded(child: SizedBox()),
-                           Text("${presidentData.getAllCandidateByCategoryList[index].totalVotes  == null ? 0 : presidentData.getAllCandidateByCategoryList[index].totalVotes}")
+                           Text("${presidentData.getAllCandidateByCategoryList[index].totalVotes}")
                          ],
                        ),
                      ),
@@ -89,7 +89,7 @@ class _ElectionResultScreenState extends State<ElectionResultScreen> {
                              children: [
                                Text("${coetData.getAllCandidateByCategoryCOETList[index].userAccount.fullName}"),
                                Expanded(child: SizedBox()),
-                               Text("${coetData.getAllCandidateByCategoryCOETList[index].totalVotes  == null ? 0 : coetData.getAllCandidateByCategoryList[index].totalVotes}")
+                               Text("${coetData.getAllCandidateByCategoryCOETList[index].totalVotes}")
                              ],
                            ),
                          ),
@@ -127,7 +127,7 @@ class _ElectionResultScreenState extends State<ElectionResultScreen> {
                              children: [
                                Text("${cobaData.getAllCandidateByCategoryCOBAList[index].userAccount.fullName}"),
                                Expanded(child: SizedBox()),
-                               Text("${cobaData.getAllCandidateByCategoryCOBAList[index].totalVotes  == null ? 0 : cobaData.getAllCandidateByCategoryList[index].totalVotes}")
+                               Text("${cobaData.getAllCandidateByCategoryCOBAList[index].totalVotes}")
                              ],
                            ),
                          ),

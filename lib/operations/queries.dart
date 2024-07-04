@@ -206,7 +206,8 @@ class SovsQueriesServices {
           "size": 20
         },
         "category": "COET_PARLIAMENT"
-      }),
+      }
+      ),
     );
 
     if (result.hasException) {
@@ -286,7 +287,8 @@ class SovsQueriesServices {
       uuid
       username
       fullName
-    }
+      courses
+  }
   }
 }
   """),variables: {

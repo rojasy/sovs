@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sovs/screens/view_candidate_screen.dart';
 
 
 import '../controllers/candidate_controller.dart';
@@ -82,7 +83,7 @@ class _PresidentialScrennState extends State<PresidentialScrenn> {
                             SizedBox(width: 10,),
                             Flexible(child: Text("${candidateData.getAllCandidateByCategoryList[index].election.category}")),
                             SizedBox(width: 10,),
-                            Flexible(child: Text("${candidateData.getAllCandidateByCategoryList[index].totalVotes == null ? 0 : candidateData.getAllCandidateByCategoryList[index].totalVotes}",style: TextStyle(fontSize: 20),)),
+                            Flexible(child: Text("${candidateData.getAllCandidateByCategoryList[index].totalVotes}",style: TextStyle(fontSize: 20),)),
                           ],
                         ),
                       ),
@@ -91,9 +92,10 @@ class _PresidentialScrennState extends State<PresidentialScrenn> {
                           IconButton(onPressed: (){
                             Navigator.of(context).push(
                                 MaterialPageRoute(builder: (context)=>
-                                    CandidateDetailsScreen(title: '${candidateData.getAllCandidateByCategoryList[index].title}',
+                                    ViewCandidateScreen(title: '${candidateData.getAllCandidateByCategoryList[index].title}',
                                       name: '${candidateData.getAllCandidateByCategoryList[index].userAccount.fullName}',
-                                      description: '${candidateData.getAllCandidateByCategoryList[index].description}',)));
+                                      description: '${candidateData.getAllCandidateByCategoryList[index].description}',
+                                      uuid: '${candidateData.getAllCandidateByCategoryList[index].uuid}',)));
                           }, icon: Icon(Icons.visibility)),
                           IconButton(onPressed: (){
                             showDialog(
@@ -130,12 +132,14 @@ class _PresidentialScrennState extends State<PresidentialScrenn> {
                                             showLoaderDialog(context);
 
                                             Map<String,dynamic>? output = await Provider.of<CandidateController>(context,listen: false).
-                                            addVote(context, candidateData.getAllCandidateByCategoryList[index].uuid, candidateData.getAllCandidateByCategoryList[index].election.uuid, 2024);
+                                            addVote(context, candidateData.getAllCandidateByCategoryList[index].uuid,
+                                                candidateData.getAllCandidateByCategoryList[index].election.uuid);
 
                                             String message = output?['addVote']['message'];
                                             bool status = output?['addVote']['error'];
 
                                             if(status == false){
+                                              await candidateData.refreshPresidentData();
                                               Navigator.of(context).pop();
                                               ScaffoldMessenger.of(
                                                   context)

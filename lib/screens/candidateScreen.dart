@@ -27,6 +27,26 @@ class _CandidateScreenState extends State<CandidateScreen> {
 
   ScrollController scrollController = ScrollController();
 
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          const CircularProgressIndicator(),
+          Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: Text("Deleting Candidate")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +193,9 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                     MaterialPageRoute(builder: (context)=>
                                         CandidateDetailsScreen(title: '${candidateData.getAllCandidatesList[index].title}',
                                           name: '${candidateData.getAllCandidatesList[index].userAccount.fullName}',
-                                          description: '${candidateData.getAllCandidatesList[index].description}',)));
+                                          description: '${candidateData.getAllCandidatesList[index].description}',
+                                          uuid: '${candidateData.getAllCandidatesList[index].uuid}', userUuid: '${candidateData.getAllCandidatesList[index].userAccount.uuid}',
+                                          electionUuid: '${candidateData.getAllCandidatesList[index].election.uuid}',)));
 
                               }, icon: Icon(Icons.visibility)),
                               IconButton(onPressed: (){
@@ -206,7 +228,39 @@ class _CandidateScreenState extends State<CandidateScreen> {
                                                     borderRadius: BorderRadius.all(Radius.circular(10)),
                                                   )
                                               ),
-                                              onPressed: (){}, child: Text("Yes",style: TextStyle(color: whiteColor),)),
+                                              onPressed: () async {
+
+                                                showLoaderDialog(context);
+
+                                                Map<String,dynamic>? output = await Provider.of<CandidateController>(context, listen: false).
+                                                deleteCandidate(context, candidateData.getAllCandidatesList[index].uuid);
+
+                                                String message = output?['deleteCandidate']['message'];
+                                                bool error = output?['deleteCandidate']['error'];
+
+                                                if(error == false){
+                                                  Navigator.pop(context);
+                                                  ScaffoldMessenger.of(
+                                                      context)
+                                                      .showSnackBar(
+                                                      SnackBar(content: Text(message)));
+                                                  Navigator.of(
+                                                      context)
+                                                      .pop();
+
+                                                }else{
+                                                  Navigator.pop(context);
+
+                                                  ScaffoldMessenger.of(
+                                                      context)
+                                                      .showSnackBar(
+                                                      SnackBar(content: Text(message),backgroundColor: errorColor,));
+                                                  Navigator.of(
+                                                      context)
+                                                      .pop();
+                                                }
+
+                                              }, child: Text("Yes",style: TextStyle(color: whiteColor),)),
 
                                         ],
                                       );

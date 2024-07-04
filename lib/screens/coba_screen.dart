@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sovs/screens/view_candidate_screen.dart';
 
 import '../controllers/candidate_controller.dart';
 import '../utils/constants.dart';
@@ -76,7 +77,7 @@ class _CobaScreenState extends State<CobaScreen> {
                             SizedBox(width: 10,),
                             Flexible(child: Text("${candidateData.getAllCandidateByCategoryCOBAList[index].election.category}")),
                             SizedBox(width: 10,),
-                            Flexible(child: Text("${candidateData.getAllCandidateByCategoryCOBAList[index].totalVotes == null ? 0 : candidateData.getAllCandidateByCategoryCOBAList[index].totalVotes }",style: TextStyle(fontSize: 20),)),
+                            Flexible(child: Text("${candidateData.getAllCandidateByCategoryCOBAList[index].totalVotes }",style: TextStyle(fontSize: 20),)),
                           ],
                         ),
                       ),
@@ -85,9 +86,9 @@ class _CobaScreenState extends State<CobaScreen> {
                           IconButton(onPressed: (){
                             Navigator.of(context).push(
                                 MaterialPageRoute(builder: (context)=>
-                                    CandidateDetailsScreen(title: '${candidateData.getAllCandidateByCategoryCOBAList[index].title}',
+                                    ViewCandidateScreen(title: '${candidateData.getAllCandidateByCategoryCOBAList[index].title}',
                                       name: '${candidateData.getAllCandidateByCategoryCOBAList[index].userAccount.fullName}',
-                                      description: '${candidateData.getAllCandidateByCategoryCOBAList[index].description}',)));
+                                      description: '${candidateData.getAllCandidateByCategoryCOBAList[index].description}', uuid: '${candidateData.getAllCandidateByCategoryCOBAList[index].uuid}',)));
                           }, icon: Icon(Icons.visibility)),
                           IconButton(onPressed: (){
                             showDialog(
@@ -124,12 +125,14 @@ class _CobaScreenState extends State<CobaScreen> {
                                             showLoaderDialog(context);
 
                                             Map<String,dynamic>? output = await Provider.of<CandidateController>(context,listen: false).
-                                            addVote(context, candidateData.getAllCandidateByCategoryCOBAList[index].uuid, candidateData.getAllCandidateByCategoryCOBAList[index].election.uuid, 2024);
+                                            addVote(context, candidateData.getAllCandidateByCategoryCOBAList[index].uuid, candidateData.getAllCandidateByCategoryCOBAList[index].election.uuid);
 
                                             String message = output?['addVote']['message'];
                                             bool status = output?['addVote']['error'];
 
                                             if(status == false){
+                                              await candidateData.refreshCOBAData();
+
                                               Navigator.of(context).pop();
                                               ScaffoldMessenger.of(
                                                   context)

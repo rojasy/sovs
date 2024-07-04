@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sovs/screens/update_user_screen.dart';
 
 import '../utils/constants.dart';
 
 class UserDetailsScreen extends StatefulWidget {
   String fullname;
+  String firstname;
+  String lastname;
+  String username;
   String uniqueId;
   String gender;
   String email;
   String phone;
-   UserDetailsScreen({required this.fullname,required this.uniqueId,required this.gender,required this.email,required this.phone,super.key});
+  String course;
+   UserDetailsScreen({required this.fullname,required this.firstname,required this.lastname,required this.username,required this.uniqueId,required this.gender,required this.email,required this.phone,required this.course,super.key});
 
   @override
   State<UserDetailsScreen> createState() => _UserDetailsScreenState();
@@ -75,6 +80,60 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         ],
       ),
     ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              24.0,
+              24.0,
+              24.0,
+              0,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.4,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Text(
+                              "Course :",
+                              overflow: TextOverflow.clip,
+                              style: detailsStyleWithBold,
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.5,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.circular(10)),
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.all(8.0),
+                                child: Text("${widget.course}",
+                                  style: TextStyle(
+                                    //color: statusColor,
+                                      fontSize: 14,
+                                      fontFamily: "Poppins"),
+                                ),
+                              ),
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
       Padding(
       padding: const EdgeInsets.fromLTRB(
         24.0,
@@ -302,7 +361,13 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   )
               ),
-              onPressed: (){}, child: Text("Update User",style: TextStyle(color: whiteColor,fontSize: 16),)),
+              onPressed: (){
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context)=>UpdateUserScreen(fullname: '${widget.fullname}',
+                      uniqueId: '${widget.uniqueId}', gender: '${widget.lastname}', email: '${widget.email}',
+                      phone: '${widget.phone}', course: '${widget.course}', firstname: '${widget.firstname}',
+                      lastname: '${widget.lastname}', username: '${widget.username}',)));
+              }, child: Text("Update User",style: TextStyle(color: whiteColor,fontSize: 16),)),
     ]
       ),
     );

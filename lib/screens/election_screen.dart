@@ -15,6 +15,27 @@ class ElectionScreen extends StatefulWidget {
 }
 
 class _ElectionScreenState extends State<ElectionScreen> {
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          const CircularProgressIndicator(),
+          Container(
+              margin: const EdgeInsets.only(left: 7),
+              child: Text("Deleting Election")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +70,7 @@ class _ElectionScreenState extends State<ElectionScreen> {
                 //   loadedStakeholder = true;
                 // }
                 return electionData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
-                electionData.getAllElection.isEmpty ? Center(child: Text("No stakeholder"),):
+                electionData.getAllElection.isEmpty ? Center(child: Text("No Election"),):
                 ListView.builder(
                     shrinkWrap: true,
                     itemCount: electionData.getAllElection.length,
@@ -64,13 +85,85 @@ class _ElectionScreenState extends State<ElectionScreen> {
                                     "Title: ${electionData.getAllElection[index].name}",
                                     // style: detailsStyle
                                 ), subtitle: Text("Category: ${electionData.getAllElection[index].category}"),
-                              trailing: IconButton(onPressed: (){},icon: Icon(Icons.delete),color: errorColor,),
+                              trailing: IconButton(onPressed: (){
+
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context){
+                                      return AlertDialog(
+                                        title: Text("Remove Election",style: TextStyle(color: primaryColor,fontFamily: "Poppins",fontSize: 20),),
+                                        content: Text("Click YES! To Remove as Election"),
+                                        actions: [
+                                          ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor: errorColor,
+                                                  padding: EdgeInsets.all(10),
+                                                  minimumSize: Size(MediaQuery.of(context).size.width * 0.2, 50),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                  )
+                                              ),
+                                              onPressed: (){
+                                                Navigator.of(context).pop();
+                                              }, child: Text("No",style: TextStyle(color: whiteColor),)),
+                                          ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor: secondaryColor,
+                                                  padding: EdgeInsets.all(10),
+                                                  minimumSize: Size(MediaQuery.of(context).size.width * 0.2, 50),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                                  )
+                                              ),
+                                              onPressed: () async {
+
+                                                showLoaderDialog(context);
+
+                                                Map<String,dynamic>? output = await Provider.of<GetAllElectionController>(context, listen: false).
+                                                deleteElection(context, electionData.getAllElection[index].uuid);
+
+                                                String message = output?['deleteElection']['message'];
+                                                bool error = output?['deleteElection']['error'];
+
+                                                if(error == false){
+                                                  Navigator.pop(context);
+                                                  ScaffoldMessenger.of(
+                                                      context)
+                                                      .showSnackBar(
+                                                      SnackBar(content: Text(message)));
+                                                  Navigator.of(
+                                                      context)
+                                                      .pop();
+
+                                                }else{
+                                                  Navigator.pop(context);
+
+                                                  ScaffoldMessenger.of(
+                                                      context)
+                                                      .showSnackBar(
+                                                      SnackBar(content: Text(message),backgroundColor: errorColor,));
+                                                  Navigator.of(
+                                                      context)
+                                                      .pop();
+                                                }
+
+                                              }, child: Text("Yes",style: TextStyle(color: whiteColor),)),
+
+                                        ],
+                                      );
+                                    });
+
+
+                              },icon: Icon(Icons.delete),color: errorColor,),
                               onTap: (){
                                 Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context)=>
                                         ElectionDetailScreen(uniqueId: '${electionData.getAllElection[index].uuid}',
                                           title: '${electionData.getAllElection[index].name}',
-                                          category: '${electionData.getAllElection[index].category}', year: '${electionData.getAllElection[index].year}', description: '${electionData.getAllElection[index].description}',)));
+                                          category: '${electionData.getAllElection[index].category}',
+                                          year: '${electionData.getAllElection[index].year}',
+                                          description: '${electionData.getAllElection[index].description}',)));
                               },
                             ),
                           ),

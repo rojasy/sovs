@@ -35,11 +35,12 @@ class GetUsersController extends ChangeNotifier {
       String? email,
       String? firstName,
       String? lastName,
+      String? password,
       String? phoneNumber,
       String? username,
       String? course
       ) async {
-    Map<String, dynamic>? result = await SovsMutation.createUser(context, email, firstName, lastName, phoneNumber, username,course);
+    Map<String, dynamic>? result = await SovsMutation.createUser(context, email, firstName, lastName,password ,phoneNumber, username,course);
     getAllUsersFunction();
     notifyListeners();
     return result;
@@ -51,12 +52,13 @@ class GetUsersController extends ChangeNotifier {
       String? email,
       String? firstName,
       String? lastName,
+      String? password,
       String? phoneNumber,
       String? username,
       String? course,
       String? uuid
       ) async {
-    Map<String, dynamic>? result = await SovsMutation.updateUser(context, uuid, email, firstName, lastName, phoneNumber, username, course);
+    Map<String, dynamic>? result = await SovsMutation.updateUser(context, uuid, email, firstName, lastName,password ,phoneNumber, username, course);
     getAllUsersFunction();
     notifyListeners();
     return result;
@@ -69,6 +71,17 @@ class GetUsersController extends ChangeNotifier {
       ) async {
     Map<String, dynamic>? result = await SovsMutation.deleteUser(context, uuid);
     getAllUsersFunction();
+    notifyListeners();
+    return result;
+  }
+
+  Future<Map<String, dynamic>?> changePassword(
+      BuildContext context,
+      String? oldPassword,
+      String? newPassword,
+      ) async {
+    Map<String, dynamic>? result = await SovsMutation.changePassword(context, oldPassword, newPassword);
+    // getAllUsersFunction();
     notifyListeners();
     return result;
   }

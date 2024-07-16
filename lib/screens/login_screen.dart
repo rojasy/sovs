@@ -125,7 +125,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextFormField(
                         controller: passwordController,
                         autofocus: false,
+                        obscureText: _passwordVisible,
                         decoration: InputDecoration(
+                            suffixIcon: IconButton(onPressed: (){
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },icon: Icon(_passwordVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,),),
                             hintText: "Password",
                             isDense: true,
                             filled: true,

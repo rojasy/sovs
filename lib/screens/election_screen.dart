@@ -36,6 +36,8 @@ class _ElectionScreenState extends State<ElectionScreen> {
     );
   }
 
+  bool isLoaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +66,10 @@ class _ElectionScreenState extends State<ElectionScreen> {
           Expanded(
             child: Consumer<GetAllElectionController>(
               builder: (context,electionData,_){
+                if (!isLoaded) {
+                  electionData.getAllElectionFunction();
+                  isLoaded = true;
+                }
                 // if (!loadedStakeholder) {
                 //   stakeholderData.getProjectStakeholdersFunction(widget.projectUniqueId);
                 //   print(stakeholderData.getProjectStakeholderList.length);

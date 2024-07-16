@@ -41,6 +41,8 @@ class _CoetScreenState extends State<CoetScreen> {
     );
   }
 
+  bool isLoaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +50,12 @@ class _CoetScreenState extends State<CoetScreen> {
 
       body: Consumer<CandidateController>(
         builder: (context,candidateData,_){
+
+          if (!isLoaded) {
+            candidateData.getAllCandidateByElectionCategoryCOET();
+            isLoaded = true;
+          }
+
           return candidateData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
           candidateData.getAllCandidateByCategoryCOETList.isEmpty ? Center(child: Text("There is no Candidate for COET parliaments"),) :
           SmartRefresher(
@@ -133,7 +141,7 @@ class _CoetScreenState extends State<CoetScreen> {
                                             bool status = output?['addVote']['error'];
 
                                             if(status == false){
-                                              await candidateData.refreshCOETData();
+                                              await candidateData.getAllCandidateByElectionCategoryCOET();
                                               Navigator.of(context).pop();
                                               ScaffoldMessenger.of(
                                                   context)

@@ -19,6 +19,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   String courseValue = '';
 
@@ -101,6 +102,22 @@ class _AddUserScreenState extends State<AddUserScreen> {
                 ),
               ),
               SizedBox(height: 10,),
+              TextFormField(
+                controller: passwordController,
+                autofocus: false,
+                decoration: InputDecoration(
+                    hintText: "Password",
+                    isDense: true,
+                    filled: true,
+                    fillColor: primaryColor.withOpacity(0.3),
+                    contentPadding: EdgeInsets.all(20),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none
+                    )
+                ),
+              ),
+              SizedBox(height: 10,),
               _buildDropdownUserCourse(UserCourse.values),
               SizedBox(height: 10,),
               TextFormField(
@@ -149,7 +166,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                     showLoaderDialog(context);
 
                     Map<String,dynamic>? output = await Provider.of<GetUsersController>(context, listen: false).createUser(context, emailController.text, firstNameController.text,
-                        lastNameController.text, phoneController.text, usernameController.text,courseValue);
+                        lastNameController.text,passwordController.text, phoneController.text, usernameController.text,courseValue);
 
                     String message = output?['createUpdateUser']['message'];
                     bool error = output?['createUpdateUser']['error'];

@@ -35,6 +35,8 @@ class _UsersScreenState extends State<UsersScreen> {
     );
   }
 
+  bool isLoaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +69,10 @@ class _UsersScreenState extends State<UsersScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Consumer<GetUsersController>(
                 builder: (context,userData,_){
+                  if (!isLoaded) {
+                    userData.getAllUsersFunction();
+                    isLoaded = true;
+                  }
                   return userData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
                   userData.getAllUser.isEmpty ? Center(child: Text("No User available"),):
                   ListView.builder(

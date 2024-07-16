@@ -10,6 +10,7 @@ import 'package:sovs/utils/constants.dart';
 
 import '../config/authentication.dart';
 import '../controllers/election_controller.dart';
+import '../models/logged_in_user_model.dart';
 import 'collage_screen.dart';
 import 'election_result_screen.dart';
 import 'login_screen.dart';
@@ -26,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _selectedIndex = 0;
 
+  // bool isAdmin = false;
+
   static const List<Widget> _widgetOptions = <Widget>[
     Home(),
     ElectionResultScreen(),
@@ -33,29 +36,74 @@ class _HomeScreenState extends State<HomeScreen> {
     SettingsScreen(),
   ];
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<GetLoggedInUserController>(context, listen: false).getLoggedInUserFunction();
+    // showSettingsItem();
+  }
+
+
+  // Future<void> showSettingsItem() async {
+  //   try {
+  //     // Retrieve user data using Provider
+  //     final userData = await Provider.of<GetLoggedInUserController>(context, listen: false).getLoggedInUserFunction();
+  //
+  //     // Check if user data is not null and has roles
+  //     if (userData != null && userData.getLoggedInUser != null) {
+  //       // Example assuming roles is a list of roles the user has
+  //       List<Role> userRoles = userData.getLoggedInUser.roles;
+  //
+  //       print("userData.getLoggedInUser");
+  //       print(userData.getLoggedInUser);
+  //
+  //       // Check if user has SUPER_ADMINISTRATOR role
+  //       bool hasAdminRole = userRoles.any((role) => role.name == 'SUPER_ADMINISTRATOR');
+  //
+  //       setState(() {
+  //         isAdmin = hasAdminRole;
+  //         // isAdmin = true;
+  //       });
+  //     }
+  //   } catch (error) {
+  //     print('Error fetching user data: $error');
+  //     // Handle error scenarios as needed
+  //   }
+  // }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: primaryColor,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home",),
-            BottomNavigationBarItem(icon: Icon(Icons.book_outlined),label: "Election Results"),
-            BottomNavigationBarItem(icon: Icon(Icons.notifications),label: "Notification"),
-            BottomNavigationBarItem(icon: Icon(Icons.settings),label: "Settings"),
-          ]),
-    );
-  }
+
+        return Scaffold(
+          body: _widgetOptions.elementAt(_selectedIndex),
+          bottomNavigationBar: Consumer<GetLoggedInUserController>(
+            builder: (context,userData,_){
+              return BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  selectedItemColor: primaryColor,
+                  currentIndex: _selectedIndex,
+                  onTap: _onItemTapped,
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home",),
+                    BottomNavigationBarItem(icon: Icon(Icons.book_outlined),label: "Election Results"),
+                    BottomNavigationBarItem(icon: Icon(Icons.notifications),label: "Notification"),
+                    // BottomNavigationBarItem(icon: Icon(Icons.settings),label: "Settings"),
+                    if (userData.isAdmin) BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
+                  ]);
+            },
+          ),
+        );
+      }
 }
 
 

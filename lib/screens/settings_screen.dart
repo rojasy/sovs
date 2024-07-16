@@ -23,6 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
+  bool isLoaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,24 +42,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                   child: Consumer<GetLoggedInUserController>(
                     builder: (context,profileData,_){
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: 40,
-                            backgroundImage: AssetImage('assets/images/uaut_logo.jpg'),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            '${profileData.getLoggedUser?.fullName}',
-                            // style: normalStyle,
-                          ),
-                          Text(
-                            '${profileData.getLoggedUser?.roles.single.name}',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
-                      );
+                      if (profileData.getLoggedUser != null && profileData.getLoggedUser!.roles.isNotEmpty) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundImage: AssetImage('assets/images/uaut_logo.jpg'),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              '${profileData.getLoggedUser!.fullName}',
+                              // style: normalStyle,
+                            ),
+                            Text(
+                              '${profileData.getLoggedUser!.roles.single.name}',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return CircularProgressIndicator(); // or another placeholder widget
+                      }
                     },
                   ),
                 ),
@@ -123,6 +128,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Consumer<DashboardController>(
           builder: (context,dashboardData,_){
+            if (!isLoaded) {
+              dashboardData.getDashboardFunction();
+              isLoaded = true;
+            }
             return SmartRefresher(
               controller: _refreshController,
               enablePullDown: true,

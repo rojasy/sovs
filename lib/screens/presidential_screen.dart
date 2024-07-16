@@ -43,6 +43,8 @@ class _PresidentialScrennState extends State<PresidentialScrenn> {
     );
   }
 
+  bool isLoaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +52,12 @@ class _PresidentialScrennState extends State<PresidentialScrenn> {
 
       body: Consumer<CandidateController>(
         builder: (context,candidateData,_){
+
+          if (!isLoaded) {
+            candidateData.getAllCandidateByElectionCategoryPresident();
+            isLoaded = true;
+          }
+
           return candidateData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
           candidateData.getAllCandidateByCategoryList.isEmpty ? Center(child: Text("There is no Candidate for Presidential"),) :
           SmartRefresher(
@@ -139,7 +147,7 @@ class _PresidentialScrennState extends State<PresidentialScrenn> {
                                             bool status = output?['addVote']['error'];
 
                                             if(status == false){
-                                              await candidateData.refreshPresidentData();
+                                              await candidateData.getAllCandidateByElectionCategoryPresident();
                                               Navigator.of(context).pop();
                                               ScaffoldMessenger.of(
                                                   context)

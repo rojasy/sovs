@@ -10,6 +10,11 @@ class GetLoggedInUserController extends ChangeNotifier {
   }
   LoggedUser? _getLoggedUser;
   LoggedUser? get getLoggedUser => _getLoggedUser;
+
+  bool _isAdmin = false;
+
+  bool get isAdmin => _isAdmin;
+
   bool dataLoading = false;
 
   getLoggedInUserFunction() async {
@@ -21,6 +26,7 @@ class GetLoggedInUserController extends ChangeNotifier {
 
       if (getLoggedInUserResponse.getLoggedInUser.code == 9000) {
         _getLoggedUser = getLoggedInUserResponse.getLoggedInUser.data;
+        _isAdmin = _getLoggedUser!.roles.any((role) => role.name == 'SUPER_ADMINISTRATOR');
         dataLoading = false;
         notifyListeners();
 

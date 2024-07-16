@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+
 GetAllCandidateByElectionCategoryResponse getAllCandidateByElectionCategoryResponseFromJson(String str) => GetAllCandidateByElectionCategoryResponse.fromJson(json.decode(str));
 
 String getAllCandidateByElectionCategoryResponseToJson(GetAllCandidateByElectionCategoryResponse data) => json.encode(data.toJson());
@@ -17,6 +18,7 @@ class GetAllCandidateByElectionCategoryResponse {
 
   factory GetAllCandidateByElectionCategoryResponse.fromJson(Map<String, dynamic> json) => GetAllCandidateByElectionCategoryResponse(
     getAllCandidateByElectionCategory: GetAllCandidateByElectionCategory.fromJson(json["getAllCandidateByElectionCategory"]),
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -33,6 +35,8 @@ class GetAllCandidateByElectionCategory {
 
   factory GetAllCandidateByElectionCategory.fromJson(Map<String, dynamic> json) => GetAllCandidateByElectionCategory(
     content: List<CandidatesContent>.from(json["content"].map((x) => CandidatesContent.fromJson(x))),
+
+    // content: json["content"] == null ? [] : List<CandidatesContent>.from(json["content"].map((x) => CandidatesContent.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {

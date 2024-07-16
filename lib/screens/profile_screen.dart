@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../controllers/logged_in_user_controller.dart';
 import '../utils/constants.dart';
+import 'change_password_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,7 +16,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Profile",style: TextStyle(color: whiteColor,fontFamily: "Poppins"),),centerTitle: true,backgroundColor: primaryColor,iconTheme: IconThemeData(color: whiteColor)),
+      appBar: AppBar(title: Text("Profile",style: TextStyle(color: whiteColor,fontFamily: "Poppins"),),centerTitle: true,
+          backgroundColor: primaryColor,iconTheme: IconThemeData(color: whiteColor),actions: [
+            IconButton(onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ChangePasswordScreen()));
+            },icon: Icon(Icons.password),),
+          ]),
       body: Consumer<GetLoggedInUserController>(
         builder: (context,profileData,_){
           return Column(

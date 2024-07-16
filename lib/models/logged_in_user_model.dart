@@ -146,7 +146,7 @@ class Vote {
   int id;
   DateTime time;
   String uuid;
-  int year;
+  dynamic year;
 
   Vote({
     required this.candidates,

@@ -62,7 +62,7 @@ class SovsMutation{
 
 
   static Future<Map<String, dynamic>?> createUser(BuildContext context,
-      String? email, String? firstName,String? lastName,String? phoneNumber,String? username,String? course,
+      String? email, String? firstName,String? lastName,String? password,String? phoneNumber,String? username,String? course,
       ) async {
     try {
       final GraphQLClient authorizedClient = await initGraphQLClient();
@@ -90,6 +90,7 @@ class SovsMutation{
               "email": email,
               "firstName": firstName,
               "lastName": lastName,
+              "password": password,
               "phoneNumber": phoneNumber,
               "username": username
             }
@@ -116,7 +117,7 @@ class SovsMutation{
 
 
   static Future<Map<String, dynamic>?> updateUser(BuildContext context,String? uuid,
-      String? email, String? firstName,String? lastName,String? phoneNumber,String? username,String? course,
+      String? email, String? firstName,String? lastName,String? password,String? phoneNumber,String? username,String? course,
       ) async {
     try {
       final GraphQLClient authorizedClient = await initGraphQLClient();
@@ -144,6 +145,7 @@ class SovsMutation{
               "email": email,
               "firstName": firstName,
               "lastName": lastName,
+              "password": password,
               "phoneNumber": phoneNumber,
               "username": username,
               "uuid": uuid
@@ -491,6 +493,52 @@ class SovsMutation{
           """),
           variables: {
             "uuid": uuid
+          },
+        ),
+      );
+
+      if (result.hasException) {
+        throw result.exception.toString();
+      }
+      else{
+        final Map<String, dynamic>? data = result.data;
+        return data;
+
+      }
+
+    } catch (e,stacktrace) {
+      print(stacktrace);
+      throw Exception(e.toString());
+    }
+  }
+
+
+  static Future<Map<String, dynamic>?> changePassword(BuildContext context,
+      String? oldPassword,String? newPassword,
+      ) async {
+    try {
+      final GraphQLClient authorizedClient = await initGraphQLClient();
+
+      QueryResult result = await authorizedClient.mutate(
+        MutationOptions(
+          document: parseString("""
+           mutation ChangePassword(\$oldpassword: String, \$newpassword: String) {
+  changePassword(oldpassword: \$oldpassword, newpassword: \$newpassword) {
+    message
+    error
+    data {
+      uuid
+      username
+      id
+      firstName
+    }
+    code
+  }
+}
+          """),
+          variables: {
+            "oldpassword": oldPassword,
+            "newpassword": newPassword
           },
         ),
       );

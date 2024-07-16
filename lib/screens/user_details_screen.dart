@@ -20,6 +20,9 @@ class UserDetailsScreen extends StatefulWidget {
 }
 
 class _UserDetailsScreenState extends State<UserDetailsScreen> {
+
+  bool isLoaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

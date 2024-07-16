@@ -17,6 +17,7 @@ class _ElectionResultScreenState extends State<ElectionResultScreen> {
 
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
+bool isLoaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,10 @@ class _ElectionResultScreenState extends State<ElectionResultScreen> {
            child: Container(
              width: MediaQuery.of(context).size.width,
              child: Consumer<CandidateController>(builder: (context,presidentData,_){
+               if (!isLoaded) {
+                 presidentData.getAllCandidateByElectionCategoryPresident();
+                 isLoaded = true;
+               }
                return presidentData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
                presidentData.getAllCandidateByCategoryList.isEmpty ? Center(child: Text("There is no Candidate for Presidential"),) : ListView.builder(
                  shrinkWrap: true,
@@ -74,6 +79,10 @@ class _ElectionResultScreenState extends State<ElectionResultScreen> {
            child: Container(
              width: MediaQuery.of(context).size.width,
              child: Consumer<CandidateController>(builder: (context,coetData,_){
+               if (!isLoaded) {
+                 coetData.getAllCandidateByElectionCategoryCOET();
+                 isLoaded = true;
+               }
                return coetData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
                coetData.getAllCandidateByCategoryCOETList.isEmpty ? Center(child: Text("There is no Candidate for COET"),) : ListView.builder(
                  shrinkWrap: true,
@@ -111,6 +120,10 @@ class _ElectionResultScreenState extends State<ElectionResultScreen> {
            child: Container(
              width: MediaQuery.of(context).size.width,
              child: Consumer<CandidateController>(builder: (context,cobaData,_){
+               if (!isLoaded) {
+                 cobaData.getAllCandidateByElectionCategoryCOBA();
+                 isLoaded = true;
+               }
                return cobaData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
                cobaData.getAllCandidateByCategoryCOBAList.isEmpty ? Center(child: Text("There is no Candidate for COBA"),) :
                ListView.builder(

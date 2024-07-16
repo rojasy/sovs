@@ -39,6 +39,8 @@ class _CobaScreenState extends State<CobaScreen> {
     );
   }
 
+  bool isLoaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +48,11 @@ class _CobaScreenState extends State<CobaScreen> {
 
       body: Consumer<CandidateController>(
         builder: (context,candidateData,_){
+          if (!isLoaded) {
+            candidateData.getAllCandidateByElectionCategoryCOBA();
+            isLoaded = true;
+          }
+
           return candidateData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
           candidateData.getAllCandidateByCategoryCOBAList.isEmpty ? Center(child: Text("There is no Candidate for COBA parliaments"),) :
           SmartRefresher(
@@ -131,7 +138,7 @@ class _CobaScreenState extends State<CobaScreen> {
                                             bool status = output?['addVote']['error'];
 
                                             if(status == false){
-                                              await candidateData.refreshCOBAData();
+                                              await candidateData.getAllCandidateByElectionCategoryCOBA();
 
                                               Navigator.of(context).pop();
                                               ScaffoldMessenger.of(

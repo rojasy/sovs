@@ -57,6 +57,9 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
   late TextEditingController lastNameController;
   late TextEditingController emailController;
   late TextEditingController phoneController;
+  // late TextEditingController passwordController;
+  TextEditingController passwordController = TextEditingController();
+
   // late String courseValue;
 
   String courseValue = '';
@@ -71,6 +74,7 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
     lastNameController = TextEditingController(text: widget.lastname);
     emailController = TextEditingController(text: widget.email);
     phoneController = TextEditingController(text: widget.phone);
+    // passwordController = TextEditingController();
     courseValue = widget.course;
 
   }
@@ -82,6 +86,7 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
     lastNameController.dispose();
     emailController.dispose();
     phoneController.dispose();
+    // passwordController.dispose();
     super.dispose();
   }
 
@@ -94,9 +99,6 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
         child: SingleChildScrollView(
           child: Consumer<GetUsersController>(
             builder: (context,userData,_){
-
-
-
               return Column(
                 children: [
                   SizedBox(height: 10,),
@@ -139,6 +141,27 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
                     onChanged: (value) {
                       setState(() {
                         widget.lastname = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10,),
+                  TextFormField(
+                    controller: passwordController,
+                    autofocus: false,
+                    decoration: InputDecoration(
+                        hintText: "Password",
+                        isDense: true,
+                        filled: true,
+                        fillColor: primaryColor.withOpacity(0.3),
+                        contentPadding: EdgeInsets.all(20),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none
+                        )
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        // widget.lastname = value;
                       });
                     },
                   ),
@@ -222,7 +245,7 @@ class _UpdateUserScreenState extends State<UpdateUserScreen> {
                         showLoaderDialog(context);
 
                         Map<String,dynamic>? output = await Provider.of<GetUsersController>(context, listen: false).
-                        updateUser(context, emailController.text, firstNameController.text, lastNameController.text,
+                        updateUser(context, emailController.text, firstNameController.text, lastNameController.text,passwordController.text,
                             phoneController.text, usernameController.text, courseValue, widget.uniqueId);
 
                         String message = output?['createUpdateUser']['message'];

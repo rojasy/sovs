@@ -47,6 +47,8 @@ class _CandidateScreenState extends State<CandidateScreen> {
     );
   }
 
+  bool isLoaded = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -163,6 +165,10 @@ class _CandidateScreenState extends State<CandidateScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Consumer<CandidateController>(
               builder: (context,candidateData,_){
+                if (!isLoaded) {
+                  candidateData.getAllCandidatesFunction();
+                  isLoaded = true;
+                }
                 return candidateData.dataLoading == true ? Center(child: CircularProgressIndicator(),) :
                 candidateData.getAllCandidatesList.isEmpty ? Center(child: Text("No Candidate available"),):
                 ListView.builder(

@@ -211,4 +211,19 @@ class CandidateController extends ChangeNotifier{
         notifyListeners();
       }
 
-}
+      // Future<void> refreshCOETData() async {
+      //   dataLoading = true;
+      //   notifyListeners();
+      //
+      //   // Fetch the latest candidate data here
+      //   try {
+      //     _getAllCandidateByCategoryCOETList = await getAllCandidateByElectionCategoryCOET() ?? [];
+      //   } catch (e) {
+      //     _getAllCandidateByCategoryCOETList = [];
+      //     // Handle error if necessary
+      //   }
+      //
+      //
+      // }
+
+      }
